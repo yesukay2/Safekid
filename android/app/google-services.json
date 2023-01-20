@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "412744498113",
+    "project_id": "child-rights-international",
+    "storage_bucket": "child-rights-international.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412744498113:android:3dbe0c95ade7d9e52f8d40",
+        "android_client_info": {
+          "package_name": "com.example.safekid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412744498113-36btbfj4n11d2rmunhvdnciqudjp07g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy2TOfIgG3YfTjU5sZkuqBl6t7KmgT9gU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412744498113-36btbfj4n11d2rmunhvdnciqudjp07g2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "412744498113-uj4c0ib2m681obfrhjfpami46dpomoj5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Yesu.cri"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
