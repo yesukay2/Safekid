@@ -7,16 +7,28 @@ class Login_Textfield extends StatelessWidget {
 
   final bool obscureText;
 
-  const Login_Textfield({super.key,required this.controller, required this.hintText, required this.obscureText});
+  final validate;
 
+  const Login_Textfield({super.key,required this.controller, required this.hintText, required this.obscureText, required this.validate});
+
+
+  // validate(value){
+  //   if(value == null || value == ""){
+  //     return("Please enter your Email");
+  //   }
+  //   else if(RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[A-Z]")){
+  //
+  //   }
+  // }
 
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
+        validator: validate,
         obscureText: obscureText,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
