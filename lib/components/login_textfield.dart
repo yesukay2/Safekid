@@ -9,7 +9,9 @@ class Login_Textfield extends StatelessWidget {
 
   final validate;
 
-  const Login_Textfield({super.key,required this.controller, required this.hintText, required this.obscureText, required this.validate});
+  final onSaved;
+
+  const Login_Textfield({super.key,required this.controller, required this.hintText, required this.obscureText, required this.validate, required this.onSaved});
 
 
   // validate(value){
@@ -29,6 +31,7 @@ class Login_Textfield extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         validator: validate,
+        onSaved: onSaved,
         obscureText: obscureText,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 enum StatusType { Victim, Witness }
@@ -13,6 +15,8 @@ class _Form_PageState extends State<Form_Page> {
   // final statusController = Co
   final locationController = TextEditingController();
   final phoneController = TextEditingController();
+  final connection = FirebaseFirestore.instance.collection("reports");
+  String? get userId => FirebaseAuth.instance.currentUser?.uid;
 
   // final groupValue = 1;
   StatusType? statusType;
@@ -29,26 +33,39 @@ class _Form_PageState extends State<Form_Page> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Report Child Abuse Case"),
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Colors.blueGrey,
         centerTitle: true,
       ),
       body: Container(
-        margin: const EdgeInsets.fromLTRB(10, 90, 10, 0),
+        margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
         child: ListView(
           children: [
+            ClipPath(
+              clipper: BottomWaveClipper(),
+              child: Image.asset(
+                "lib/images/Defending-the-Innocent.png",
+                fit: BoxFit.cover,
+                height: 200,
+              ),
+            ),
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "I am a ___",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 15,),
+
+                const SizedBox(height: 35,),
                 Row(
                   children: [
+                    const Text(
+                      "I am a",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+
+                    const SizedBox(width: 15,height: 25,),
                     Expanded(
                       child: RadioListTile<StatusType>(
                         contentPadding: const EdgeInsets.all(0.0),
@@ -60,9 +77,11 @@ class _Form_PageState extends State<Form_Page> {
                           groupValue: statusType,
                           tileColor: Colors.deepOrange.shade100,
                           title: Text(StatusType.Victim.name),
-                          onChanged: (val) {
+
+                          onChanged: (value) {
+                          // print(value);
                             setState(() {
-                              statusType = val;
+                              statusType = value;
                             });
                           }),
                     ),
@@ -77,11 +96,11 @@ class _Form_PageState extends State<Form_Page> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(7)
                           ),
-                          tileColor: Colors.deepOrange.shade100,
+                          tileColor: Colors.blue.shade100,
                           title: Text(StatusType.Witness.name),
-                          onChanged: (val) {
+                          onChanged: (value) {
                             setState(() {
-                              statusType = val;
+                              statusType = value;
                             });
                           }),
                     ),
@@ -105,7 +124,7 @@ class _Form_PageState extends State<Form_Page> {
             TextFormField(
               controller: phoneController,
               decoration: const InputDecoration(
-                  labelText: "Enter your Phone number:",
+                  labelText: "Phone number",
                   prefixIcon: Icon(Icons.phone),
                   border: OutlineInputBorder()),
             ),
@@ -113,9 +132,17 @@ class _Form_PageState extends State<Form_Page> {
               height: 95,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                connection.add({
+                  'user_id': userId,
+                  'status': statusType,
+                  'location': locationController.text,
+                  'phone': phoneController.text,
+                });
+              },
               style:
-                  ElevatedButton.styleFrom(backgroundColor: Colors.deepOrange),
+                  ElevatedButton.styleFrom(backgroundColor: Colors.deepOrange,
+                  ),
               child: const Text("Report"),
             )
           ],
@@ -123,4 +150,33 @@ class _Form_PageState extends State<Form_Page> {
       ),
     );
   }
+}
+class BottomWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0.0, size.height - 15);
+
+    var firstControlPoint = Offset(size.width / 4, size.height);
+    var firstEndPoint = Offset(size.width / 2.25, size.height - 10.0);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    var secondControlPoint =
+    Offset(size.width - (size.width / 3.25), size.height - 1);
+    var secondEndPoint = Offset(size.width, size.height - 5);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
+
+    path.lineTo(size.width, size.height - 40);
+    path.lineTo(size.width, 0.0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+
+
 }

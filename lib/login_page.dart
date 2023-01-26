@@ -84,12 +84,32 @@ class _LoginPageState extends State<LoginPage> {
                 controller: emailController,
                 hintText: "E-mail",
                 obscureText: false,
+                validate: (value){
+                  if(value!.isEmpty){
+                    return("E-mail required!");
+                  }if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                      .hasMatch(value)){
+                    return("Invalid E-mail");
+                  }
+                },
+                onSaved: (value){
+                  emailController.text = value!;
+                },
               ),
 
               Login_Textfield(
                 controller: passwordController,
                 hintText: "Password",
                 obscureText: true,
+                validate: (value){
+                  if(value!.isEmpty){
+                    return("Enter Password");
+                  }
+                  return null;
+                },
+                onSaved: (value){
+                  passwordController.text = value!;
+                },
               ),
 
               Padding(

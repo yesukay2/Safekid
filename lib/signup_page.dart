@@ -30,40 +30,7 @@ class _SignUp_PageState extends State<SignUp_Page> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  //SignUp  Method
-  // void signUpAction() async {
-  //   //show loading circle
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return const Center(
-  //           child: CircularProgressIndicator(
-  //             color: Colors.lightBlue,
-  //             backgroundColor: Colors.deepOrange,
-  //           ),
-  //         );
-  //       });
-  //   try {
-  //     if (passwordController.text == confirmPasswordController.text) {
-  //       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //           email: emailController.text, password: passwordController.text);
-  //     } else {
-  //       PasswordMismatchMessage();
-  //     }
-  //
-  //     //   pop loading circle
-  //     Navigator.pop(context);
-  //   } on FirebaseAuthException catch (e) {
-  //     //   pop loading circle
-  //     Navigator.pop(context);
-  //
-  //     // if(e.code == 'user-not-found'){
-  //     //   wrongEmailMessage();
-  //     // }else if (e.code == 'wrong-password'){
-  //     //   wrongPasswordMessage();
-  //     // }
-  //   }
-  // }
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,181 +39,183 @@ class _SignUp_PageState extends State<SignUp_Page> {
       body: SafeArea(
         child: SingleChildScrollView(
           // reverse: true,
-          child: Column(
-            //   mainAxisSize: MainAxisSize.min,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              //   mainAxisSize: MainAxisSize.min,
 
-            children: [
-              const SizedBox(
-                height: 30,
-              ),
-              const Image(
-                image: AssetImage(
-                  'lib/images/logo-removebg-preview.png',
+              children: [
+                const SizedBox(
+                  height: 30,
                 ),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              Text(
-                "Register",
-                style: TextStyle(
-                  color: Colors.blue.shade900,
-                  fontSize: 25,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Login_Textfield(
-                controller: firstNameController,
-                hintText: "Firstname",
-                obscureText: false,
-                validate: (value){
-                  if(value!.isEmpty){
-                    return("Lastname Required");
-                  }
-                  return null;
-                },
-              ),
-              Login_Textfield(
-                controller: lastNameController,
-                hintText: "Lastname",
-                obscureText: false,
-                validate: (value){
-                  if(value!.isEmpty){
-                    return("Lastname Required");
-                  }
-                  return null;
-                },
-              ),
-              Login_Textfield(
-                controller: emailController,
-                hintText: "E-mail",
-                obscureText: false,
-                validate: (value){
-                  if(value!.isEmpty){
-                    return("E-mail required!");
-                  }if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                  .hasMatch(value)){
-                    return("Invalid E-mail");
-                  }
-                },
-              ),
-              Login_Textfield(
-                controller: phoneController,
-                hintText: "Phone Number",
-                obscureText: false,
-
-              ),
-              Login_Textfield(
-                controller: passwordController,
-                hintText: "Password",
-                obscureText: false,
-                validate: (value){
-                  RegExp regex = RegExp(r'^.{6,}$');
-                  if(value!.isEmpty){
-                    return("Password Required");
-                  }
-                  if(!regex.hasMatch(value)){
-                    return("Enter Valid Password(Min. 6 characters");
-                  }
-                },
-              ),
-              Login_Textfield(
-                controller: confirmPasswordController,
-                hintText: "Confirm Password",
-                obscureText: false,
-                validate: (value) {
-                  if (passwordController.text !=
-                      confirmPasswordController.text) {
-                    return "Password don't match";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 45),
-
-              ElevatedButton(
-                onPressed: () {
-                  signUpAction(emailController.text, passwordController.text);
-                },
-                child:
-                const Text("Register",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
+                const Image(
+                  image: AssetImage(
+                    'lib/images/logo-removebg-preview.png',
                   ),
-
-              ),),
-
-
-              const SizedBox(height: 45),
-              const Text("Already have an account?"),
-              const SizedBox(height: 5),
-              GestureDetector(
-                onTap: widget.onTap,
-                child: const Text(
-                  "Login",
-                  style: TextStyle(color: Colors.blue),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 60,
+                ),
+                Text(
+                  "Register",
+                  style: TextStyle(
+                    color: Colors.blue.shade900,
+                    fontSize: 25,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Login_Textfield(
+                  controller: firstNameController,
+                  hintText: "Firstname",
+                  obscureText: false,
+                  validate: (value){
+                    if(value!.isEmpty){
+                      return("Lastname Required");
+                    }
+                    return null;
+                  },
+                  onSaved: (value){
+                    firstNameController.text = value!;
+                  },
+                ),
+                Login_Textfield(
+                  controller: lastNameController,
+                  hintText: "Lastname",
+                  obscureText: false,
+                  validate: (value){
+                    if(value!.isEmpty){
+                      return("Lastname Required");
+                    }
+                    return null;
+                  },
+                  onSaved: (value){
+                    lastNameController.text = value!;
+                  },
+                ),
+                Login_Textfield(
+                  controller: emailController,
+                  hintText: "E-mail",
+                  obscureText: false,
+                  validate: (value){
+                    if(value!.isEmpty){
+                      return("E-mail required!");
+                    }if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                    .hasMatch(value)){
+                      return("Invalid E-mail");
+                    }
+                  },
+                  onSaved: (value){
+                    emailController.text = value!;
+                  },
+                ),
+                Login_Textfield(
+                  controller: phoneController,
+                  hintText: "Phone Number",
+                  obscureText: false,
+                  validate: (value){
+                    if(value!.isEmpty){
+                      return "Please Enter a Phone Number";
+                    }else if(!RegExp(r'^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$').hasMatch(value)){
+                      return "Please Enter a Valid Phone Number";
+                    }
+                  },
+                  onSaved: (value){
+                    phoneController.text = value!;
+                  },
+                ),
+                Login_Textfield(
+                  controller: passwordController,
+                  hintText: "Password",
+                  obscureText: false,
+                  validate: (value){
+                    RegExp regex = RegExp(r'^.{6,}$');
+                    if(value!.isEmpty){
+                      return("Password Required");
+                    }
+                    if(!regex.hasMatch(value)){
+                      return("Enter Valid Password(Min. 6 characters");
+                    }
+                  },
+                  onSaved: (value){
+                    passwordController.text = value!;
+                  },
+                ),
+                Login_Textfield(
+                  controller: confirmPasswordController,
+                  hintText: "Confirm Password",
+                  obscureText: false,
+                  validate: (value) {
+                    if (passwordController.text !=
+                        confirmPasswordController.text) {
+                      return "Password don't match";
+                    }
+                    return null;
+                  },
+                  onSaved: (value){
+                    confirmPasswordController.text = value!;
+                  },
+                ),
+                const SizedBox(height: 45),
+
+                ElevatedButton(
+                  onPressed: () {
+                    signUpAction(emailController.text, passwordController.text);
+                  },
+                  child:
+                  const Text("Register",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
+
+                ),),
+                isLoading ? CircularProgressIndicator(color: Colors.lightBlue, backgroundColor: Colors.deepOrange,) : SizedBox.shrink(),
+
+
+                const SizedBox(height: 45),
+                const Text("Already have an account?"),
+                const SizedBox(height: 5),
+                GestureDetector(
+                  onTap: widget.onTap,
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void wrongEmailMessage() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.of(context).pop(true);
-          });
-          return const AlertDialog(
-            backgroundColor: Colors.deepOrangeAccent,
-            title: Text(
-              "Incorrect E-mail",
-              style: TextStyle(color: Colors.lightBlue),
-            ),
-          );
-        });
-  }
-
-  void PasswordMismatchMessage() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.of(context).pop(true);
-          });
-          return const AlertDialog(
-            title: Text("Password Mismatch"),
-          );
-        });
-  }
 
 
   void signUpAction(String email, String password) async {
+    setState(() {
+      isLoading = true;
+    });
     if (_formKey.currentState!.validate()) {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password)
           .then((value) => {
-      postDetailsToFirestore(),
+        postDetailsToFirestore(),
       }).catchError((e) {
         Fluttertoast.showToast(msg: e!.message);
+      });
+    } else {
+      setState(() {
+        isLoading = false;
       });
     }
   }
 
   postDetailsToFirestore() async
   {
-    //  calling firestore
-    //  calling user model
-    //  send values
-
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
@@ -263,6 +232,7 @@ class _SignUp_PageState extends State<SignUp_Page> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully");
 
+    // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(
         context, MaterialPageRoute(builder: (context) => HomePage()), (
         route) => false);
