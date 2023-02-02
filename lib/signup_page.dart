@@ -35,6 +35,11 @@ class _SignUp_PageState extends State<SignUp_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Register"),
+        centerTitle: true,
+        backgroundColor: Colors.blueGrey,
+      ),
       backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: SingleChildScrollView(
@@ -50,16 +55,16 @@ class _SignUp_PageState extends State<SignUp_Page> {
                 ),
                 const Image(
                   image: AssetImage(
-                    'lib/images/logo-removebg-preview.png',
+                    'lib/images/logo-removebg-preview.jpg',
                   ),
                 ),
                 const SizedBox(
                   height: 60,
                 ),
                 Text(
-                  "Register",
+                  "Safekid",
                   style: TextStyle(
-                    color: Colors.blue.shade900,
+                    color: Colors.purple.shade900,
                     fontSize: 25,
                     decoration: TextDecoration.underline,
                   ),
@@ -117,9 +122,9 @@ class _SignUp_PageState extends State<SignUp_Page> {
                   obscureText: false,
                   validate: (value){
                     if(value!.isEmpty){
-                      return "Please Enter a Phone Number";
+                      return "Phone Number required";
                     }else if(!RegExp(r'^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$').hasMatch(value)){
-                      return "Please Enter a Valid Phone Number";
+                      return "Invalid Phone Number";
                     }
                   },
                   onSaved: (value){
@@ -129,14 +134,14 @@ class _SignUp_PageState extends State<SignUp_Page> {
                 Login_Textfield(
                   controller: passwordController,
                   hintText: "Password",
-                  obscureText: false,
+                  obscureText: true,
                   validate: (value){
                     RegExp regex = RegExp(r'^.{6,}$');
                     if(value!.isEmpty){
                       return("Password Required");
                     }
                     if(!regex.hasMatch(value)){
-                      return("Enter Valid Password(Min. 6 characters");
+                      return("Invalid Password(Min. 6 characters");
                     }
                   },
                   onSaved: (value){
@@ -146,11 +151,11 @@ class _SignUp_PageState extends State<SignUp_Page> {
                 Login_Textfield(
                   controller: confirmPasswordController,
                   hintText: "Confirm Password",
-                  obscureText: false,
+                  obscureText: true,
                   validate: (value) {
                     if (passwordController.text !=
                         confirmPasswordController.text) {
-                      return "Password don't match";
+                      return "Passwords don't match";
                     }
                     return null;
                   },
@@ -161,6 +166,9 @@ class _SignUp_PageState extends State<SignUp_Page> {
                 const SizedBox(height: 45),
 
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepOrangeAccent,
+                  ),
                   onPressed: () {
                     signUpAction(emailController.text, passwordController.text);
                   },
@@ -172,7 +180,7 @@ class _SignUp_PageState extends State<SignUp_Page> {
                     ),
 
                 ),),
-                isLoading ? CircularProgressIndicator(color: Colors.lightBlue, backgroundColor: Colors.deepOrange,) : SizedBox.shrink(),
+                isLoading ? const CircularProgressIndicator(color: Colors.lightBlue, backgroundColor: Colors.deepOrange,) : const SizedBox.shrink(),
 
 
                 const SizedBox(height: 45),
@@ -227,7 +235,7 @@ class _SignUp_PageState extends State<SignUp_Page> {
     userModel.secondName = lastNameController.text;
 
     await firebaseFirestore
-        .collection('user')
+        .collection('users')
         .doc(user.uid)
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully");

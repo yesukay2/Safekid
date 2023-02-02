@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:safekid/signup_page.dart';
 import 'components/login_textfield.dart';
 import 'components/button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -43,9 +44,13 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pop(context);
 
         if(e.code == 'user-not-found'){
-          wrongEmailMessage();
+          // wrongEmailMessage();
+          Fluttertoast.showToast(msg: "User not found");
         }else if (e.code == 'wrong-password'){
-          wrongPasswordMessage();
+          // wrongPasswordMessage();
+          Fluttertoast.showToast(msg: "Incorrect Password");
+        }if (emailController.text.isEmpty || passwordController.text.isEmpty){
+          Fluttertoast.showToast(msg: "Please enter required details!");
         }
       }
 
@@ -65,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
             children: [
               const SizedBox(height: 30,),
-              const Image(image: AssetImage('lib/images/logo-removebg-preview.png',),
+              const Image(image: AssetImage('lib/images/logo-removebg-preview.jpg',),
               ),
 
               const SizedBox(height: 60,),
