@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:safekid/auth_page.dart';
-import 'package:safekid/form_page.dart';
-import 'login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'auth_page.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -25,8 +25,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Merriweather",
       ),
-      home: AuthPage(),
+      home: new AnimatedSplashScreen(
+        splash: Image.asset("lib/images/CRI_logo.png"),
+        splashIconSize: 300,
+        nextScreen: AuthPage(),
+        centered: true,
+        duration: 5,
+        animationDuration: Duration(seconds: 2),
+        splashTransition: SplashTransition.fadeTransition,
+        curve:Curves.decelerate,
+      ),
+      builder: EasyLoading.init(),
     );
   }
 }
-

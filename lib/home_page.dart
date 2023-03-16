@@ -1,12 +1,8 @@
-import 'dart:ui';
 
-import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:safekid/form_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:safekid/login_page.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -46,7 +42,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 80,
+            height: 90,
           ),
           Container(
             child: ElevatedButton.icon(
@@ -54,24 +50,30 @@ class HomePage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepOrange.shade500,
                 shape: StadiumBorder(),
-                fixedSize: Size(200, 60),
+                side: BorderSide(
+                  style: BorderStyle.solid,
+                  width: 3,
+                  color: Colors.white60,
+                ),
+                fixedSize: Size(180, 50),
+                elevation: 20,
               ),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Form_Page()));
+                    MaterialPageRoute(builder: (context) => Form_Page()));
               },
               icon: Icon(Icons.report_gmailerrorred_outlined,
-                size:35,
+                size:30,
               ),
               label: Text("Report Case",
                 style: TextStyle(
-                  fontSize: 20
+                  fontSize: 18
                 ),
               ),
             ),
           ),
           const SizedBox(
-            height: 100,
+            height: 80,
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),

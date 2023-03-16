@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:safekid/home_page.dart';
 import 'package:safekid/model/user_model.dart';
 import 'components/login_textfield.dart';
-import 'components/button.dart';
 
 class SignUp_Page extends StatefulWidget {
   final Function()? onTap;
@@ -230,7 +229,7 @@ class _SignUp_PageState extends State<SignUp_Page> {
     UserModel userModel = UserModel();
 
     userModel.email = user!.email;
-    userModel.uid = user!.uid;
+    userModel.uid = user.uid;
     userModel.firstName = firstNameController.text;
     userModel.secondName = lastNameController.text;
 

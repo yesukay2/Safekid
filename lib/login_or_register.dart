@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safekid/login_page.dart';
 import 'package:safekid/signup_page.dart';
-import 'package:safekid/signup_page.dart';
 
 class Login_or_Register_Page extends StatefulWidget {
   const Login_or_Register_Page({Key? key}) : super(key: key);

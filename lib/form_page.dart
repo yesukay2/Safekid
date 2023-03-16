@@ -2,10 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
-import 'package:safekid/admin_notification.dart';
-
-enum StatusType { Victim, Witness }
+enum StatusType { Victim, Witness_Informant }
 
 enum CaseCategory {
   Rape,
@@ -27,18 +26,24 @@ class Form_Page extends StatefulWidget {
   State<Form_Page> createState() => _Form_PageState();
 }
 
+final _formKey = GlobalKey<FormState>();
+
+bool _validate() {
+  return _formKey.currentState!.validate();
+}
+
 class _Form_PageState extends State<Form_Page> {
-  // final statusController = Co
-  final _formKey = GlobalKey<FormState>();
+
   final locationController = TextEditingController();
   final phoneController = TextEditingController();
   final ageController = TextEditingController();
   final commentController = TextEditingController();
   final connection = FirebaseFirestore.instance.collection("reports");
 
-  bool victimCheck = false;
+  bool victimCheck = true;
   bool witnessCheck = false;
   bool onlineCheck = false;
+  bool informantCheck = false;
 
   final List<String> onlineList = [
     "Child Pornography",
@@ -50,13 +55,15 @@ class _Form_PageState extends State<Form_Page> {
     "Child Labour"
   ];
 
-  String dropdownValue = "choose one";
+  String? dropdownValue;
 
   String? get userId => FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = false;
 
-  StatusType? statusType;
+  StatusType statusType = StatusType.Victim;
   CaseCategory? caseCategory;
+
+  bool hasErrorMessage = false;
 
   @override
   void dispose() {
@@ -69,420 +76,539 @@ class _Form_PageState extends State<Form_Page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Report Child Abuse Case"),
+        title: const Text("Report Abuse Case"),
         backgroundColor: Colors.blueGrey,
         centerTitle: true,
       ),
-      body: Form(
-        key: _formKey,
-        child: Container(
-          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: ListView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            children: [
-              ClipPath(
-                clipper: BottomWaveClipper(),
-                child: Image.asset(
-                  "lib/images/Defending-the-Innocent.png",
-                  fit: BoxFit.cover,
-                  height: 200,
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  Row(
-                    children: [
-                      const Text(
-                        "I am a",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                        height: 25,
-                      ),
-                      Expanded(
-                        child: RadioListTile<StatusType>(
-                            contentPadding: const EdgeInsets.all(0.0),
-                            value: StatusType.Victim,
-                            dense: true,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7)),
-                            groupValue: statusType,
-                            tileColor: Colors.deepOrange.shade100,
-                            title: Text(StatusType.Victim.name),
-                            onChanged: (value) {
-                              // print(value);
-                              setState(() {
-                                statusType = value;
-                                victimCheck = true;
-                                witnessCheck = false;
-                              });
-                            }),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: RadioListTile<StatusType>(
-                            contentPadding: const EdgeInsets.all(0.0),
-                            value: StatusType.Witness,
-                            groupValue: statusType,
-                            dense: true,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7)),
-                            tileColor: Colors.blue.shade100,
-                            title: Text(StatusType.Witness.name),
-                            onChanged: (value) {
-                              setState(() {
-                                statusType = value;
-                                witnessCheck = true;
-                                victimCheck = false;
-                              });
-                            }),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  victimCheck
-                      ? TextFormField(
-                          controller: ageController,
-                          decoration: InputDecoration(
-                            labelText: "Enter your age",
-                            prefixIcon: Icon(Icons.perm_contact_calendar),
-                            border: OutlineInputBorder(),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Container(
+              child: FormField(
+                builder: (FormFieldState<dynamic> state) {
+                  return Form(
+                    key: _formKey,
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Column(
+                        children: [
+                          ClipPath(
+                            clipper: BottomWaveClipper(),
+                            child: Image.asset(
+                              "lib/images/Defending-the-Innocent.png",
+                              fit: BoxFit.cover,
+                              height: 200,
+                            ),
                           ),
-                        )
-                      : Container(),
-                  witnessCheck
-                      ? TextFormField(
-                          controller: ageController,
-                          decoration: InputDecoration(
-                            labelText: "Enter Victim's age",
-                            prefixIcon: Icon(Icons.perm_contact_calendar),
-                            border: OutlineInputBorder(),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 35,
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "I am a",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                    height: 25,
+                                  ),
+                                  Expanded(
+                                    child: RadioListTile<StatusType>(
+                                        contentPadding: const EdgeInsets.all(0.0),
+                                        toggleable: true,
+                                        value: StatusType.Victim,
+                                        dense: true,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(17),
+                                          side: BorderSide(
+                                            style: BorderStyle.solid,
+                                            color: Colors.deepOrange.shade500,
+                                          ),
+                                        ),
+                                        groupValue: statusType,
+                                        // tileColor: Colors.deepOrange.shade100,
+                                        title: Text(StatusType.Victim.name),
+                                        onChanged: (value) {
+                                          // print(value);
+                                          setState(() {
+                                            statusType = value!;
+                                            victimCheck = true;
+                                            witnessCheck = false;
+                                          });
+                                        }),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: RadioListTile<StatusType>(
+                                        activeColor: Colors.deepOrange,
+                                        contentPadding: const EdgeInsets.all(0.0),
+                                        toggleable: true,
+                                        value: StatusType.Witness_Informant,
+                                        groupValue: statusType,
+                                        dense: true,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(17),
+                                            side: BorderSide(
+                                              color: Colors.blue.shade900,
+                                            )),
+                                        // tileColor: Colors.blue.shade100,
+                                        title: Text("Witness/Informant"),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            statusType = value!;
+                                            witnessCheck = true;
+                                            victimCheck = false;
+                                          });
+                                        }),
+                                  ),
+                                  Text(
+                                    state.errorText ?? "",
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.error,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                child: TextFormField(
+                                  controller: ageController,
+                                  validator: (value) {
+                                    print(caseCategory);
+                                    //validate category check
+                                    if(caseCategory == null){
+                                      print('got here');
+                                      setState(() {
+                                        hasErrorMessage = true;
+                                      });
+                                    }
+                                    if (value == null || value == "") {
+                                      return ("Age required!");
+                                    }
+
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: victimCheck ? "Enter your age" : "Enter Victim's age",
+                                    prefixIcon: Icon(Icons.perm_contact_calendar),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 25,
+                              ),
+                              const Text(
+                                "Select the category that best describes the incident:",
+                                softWrap: true,
+                                style: TextStyle(
+                                  fontSize: 16.8,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
                           ),
-                        )
-                      : Container(),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  const Text(
-                    "Select the category that best describes the incident:",
-                    softWrap: true,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w300,
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Rape,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.deepOrange.shade500,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.deepOrange.shade100,
+                              title: Text(CaseCategory.Rape.name),
+                              onChanged: (value) {
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Assault_Physical_Abuse,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.blue.shade900,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.blue.shade100,
+                              title: Text("Assault or Physical Abuse"),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Molestation,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.deepOrange.shade500,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.deepOrange.shade100,
+                              title: Text(CaseCategory.Molestation.name),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Child_Custody,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.blue.shade900,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.blue.shade100,
+                              title: Text("Child Custody"),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Education,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.deepOrange.shade500,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.deepOrange.shade100,
+                              title: Text(CaseCategory.Education.name),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Medical,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.blue.shade900,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.blue.shade100,
+                              title: Text(CaseCategory.Medical.name),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Teen_Marriage,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.deepOrange.shade500,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.deepOrange.shade100,
+                              title: Text("Teen Marriage"),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Child_Support,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.blue.shade900,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.blue.shade100,
+                              title: Text("Child Support"),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Child__Neglect,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.deepOrange.shade500,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.deepOrange.shade100,
+                              title: Text("Child Neglect"),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = false;
+                                });
+                              }),
+                          const SizedBox(height: 10),
+                          RadioListTile<CaseCategory>(
+                              contentPadding: const EdgeInsets.all(0.0),
+                              value: CaseCategory.Online,
+                              dense: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: BorderSide(
+                                    color: Colors.blue.shade900,
+                                  )),
+                              groupValue: caseCategory,
+                              // tileColor: Colors.blue.shade100,
+                              title: Text(CaseCategory.Online.name),
+                              onChanged: (value) {
+                                // print(value);
+                                setState(() {
+                                  caseCategory = value!;
+                                  onlineCheck = true;
+                                });
+                              }),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                hasErrorMessage ? 'Please select a category' : '',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          onlineCheck
+                              ? Padding(
+                            padding: const EdgeInsets.fromLTRB(36.0, 0, 0, 0),
+                            child: DropdownButtonFormField(
+                                validator: (value) {
+                                  if (onlineCheck) {
+                                    if (value == null || value == "") {
+                                      return ("Select option");
+                                    }
+                                    return null;
+                                  }
+                                  return null;
+                                },
+                                hint: Text(
+                                  "Type of Online Abuse",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                icon: const Icon(
+                                    Icons.arrow_drop_down_circle_outlined),
+                                elevation: 10,
+                                items: onlineList.map<DropdownMenuItem<String>>(
+                                        (String dropdownValue) {
+                                      return DropdownMenuItem<String>(
+                                          value: dropdownValue,
+                                          child: Text(dropdownValue));
+                                    }).toList(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                }),
+                          )
+                              : Container(),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          TextFormField(
+                            controller: locationController,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == "") {
+                                return ("Location required!");
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                                labelText: "Where did the incident happen?",
+                                prefixIcon: Icon(Icons.location_on_outlined),
+                                border: OutlineInputBorder()),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          TextFormField(
+                            controller: phoneController,
+                            keyboardType: TextInputType.phone,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (value){
+                              if(value==""){
+                                return("Phone number required!");
+                              }else if(value?.length!=10){
+                                return("Invalid Phone number!");
+                              }
+                            },
+                            decoration: const InputDecoration(
+                                labelText: "Phone number",
+                                prefixIcon: Icon(Icons.phone),
+                                border: OutlineInputBorder()),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            controller: commentController,
+                            keyboardType: TextInputType.multiline,
+                            cursorHeight: 20,
+                            maxLines: 5,
+                            textAlign: TextAlign.start,
+                            textAlignVertical: TextAlignVertical.center,
+                            style: TextStyle(
+                              height: 1.5,
+                            ),
+                            decoration: const InputDecoration(
+                                labelText: "Optional: Describe the said incident",
+                                prefixIcon: Icon(Icons.insert_comment_outlined),
+                                isDense: true,
+                                border: OutlineInputBorder()),
+                          ),
+                          const SizedBox(
+                            height: 45,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 100),
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                fixedSize: Size(165, 40),
+                                backgroundColor: Colors.deepOrange,
+                                elevation: 15,
+                              ),
+                              onPressed: () {
+                                reportCase();
+                              },
+                              icon: Icon(
+                                Icons.library_add_check,
+                              ),
+                              label: Text("Submit Report"),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                ],
+                  );
+                },
+                // validator: (value) {
+                //   if (statusType == "" || statusType == null) {
+                //     return ("Status Required!");
+                //   } else
+                //     return null;
+                // },
               ),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Rape,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.deepOrange.shade100,
-                  title: Text(CaseCategory.Rape.name),
-                  onChanged: (value) {
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Assault_Physical_Abuse,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.blue.shade100,
-                  title: Text("Assault or Physical Abuse"),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Molestation,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.deepOrange.shade100,
-                  title: Text(CaseCategory.Molestation.name),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Child_Custody,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.blue.shade100,
-                  title: Text("Child Custody"),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Education,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.deepOrange.shade100,
-                  title: Text(CaseCategory.Education.name),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Medical,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.blue.shade100,
-                  title: Text(CaseCategory.Medical.name),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Teen_Marriage,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.deepOrange.shade100,
-                  title: Text("Teen Marriage"),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Child_Support,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.blue.shade100,
-                  title: Text("Child Support"),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Child__Neglect,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.deepOrange.shade100,
-                  title: Text("Child Neglect"),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = false;
-                    });
-                  }),
-              const SizedBox(height: 10),
-              RadioListTile<CaseCategory>(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  value: CaseCategory.Online,
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  groupValue: caseCategory,
-                  tileColor: Colors.blue.shade100,
-                  title: Text(CaseCategory.Online.name),
-                  onChanged: (value) {
-                    // print(value);
-                    setState(() {
-                      caseCategory = value;
-                      onlineCheck = true;
-                    });
-                  }),
-              const SizedBox(
-                height: 8,
-              ),
-              onlineCheck
-                  ? Padding(
-                      padding: const EdgeInsets.fromLTRB(36.0, 0, 0, 0),
-                      child: DropdownButtonFormField(
-                          hint: Text(
-                            "Type of Online Abuse",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          icon:
-                              const Icon(Icons.arrow_drop_down_circle_outlined),
-                          elevation: 10,
-                          items: onlineList.map<DropdownMenuItem<String>>(
-                              (String dropdownValue) {
-                            return DropdownMenuItem<String>(
-                                value: dropdownValue,
-                                child: Text(dropdownValue));
-                          }).toList(),
-                          onChanged: (String? value) {
-                            setState(() {
-                              dropdownValue = value!;
-                            });
-                          }),
-                    )
-                  : Container(),
-              const SizedBox(
-                height: 25,
-              ),
-              TextFormField(
-                controller: locationController,
-                decoration: const InputDecoration(
-                    labelText: "Where did the incident happen?",
-                    prefixIcon: Icon(Icons.location_on_outlined),
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              TextFormField(
-                controller: phoneController,
-                decoration: const InputDecoration(
-                    labelText: "Phone number",
-                    prefixIcon: Icon(Icons.phone),
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: commentController,
-                keyboardType: TextInputType.multiline,
-                cursorHeight: 20,
-                maxLines: 5,
-                textAlign: TextAlign.start,
-                textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(
-                  height: 1.5,
-                ),
-                decoration: const InputDecoration(
-                    labelText: "Optional: Describe the  said incident",
-                    prefixIcon: Icon(Icons.insert_comment_outlined),
-                    isDense: true,
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 45,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 100),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    fixedSize: Size(100, 40),
-                    backgroundColor: Colors.deepOrange,
-                    elevation: 15,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isLoading = true;
-                    });
-
-                    //email notification ****not working
-                    checkForNewDataAndSendNotification(
-                        "records", "yesukay2@gmail.com");
-
-                    if (_formKey.currentState!.validate()) {
-                      connection.add({
-                        'user_id': userId,
-                        'status': statusType?.name,
-                        'location': locationController.text,
-                        'phone': phoneController.text,
-                        'timestamp': Timestamp.now(),
-                        'case_category': caseCategory?.name,
-                        'age': ageController.text,
-                        'online_category': dropdownValue,
-                        'comment': commentController.text,
-                      });
-                    } else {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                    Fluttertoast.showToast(
-                        msg: "Report Submitted Successfully");
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(
-                    Icons.library_add_check,
-                  ),
-                  label: Text("Submit Report"),
-                ),
-              ),
-              isLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.lightBlue,
-                      backgroundColor: Colors.deepOrange,
-                    )
-                  : const SizedBox.shrink(),
-            ],
+            ),
           ),
-        ),
+          true ? Container(
+            color: Colors.grey.withOpacity(0.6),
+            child: Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(),
+              )
+            ),
+          ) : SizedBox.shrink()
+        ],
       ),
     );
+  }
+
+
+  void reportCase() async {
+    print(_formKey.currentState);
+    setState(() {
+      hasErrorMessage = false;
+    });
+    if (_validate() == true) {
+      setState(() {
+        isLoading = true;
+      });
+      await connection.add({
+        'user_id': userId!,
+        'status': statusType.name,
+        'location': locationController.text,
+        'phone': phoneController.text,
+        'timestamp': Timestamp.now(),
+        'case_category': caseCategory!.name,
+        'age': ageController.text,
+        'online_category': dropdownValue,
+        'comment': commentController.text,
+      });
+
+
+      Fluttertoast.showToast(msg: "Report Submitted Successfully");
+      Navigator.of(context).pop();
+    }else
+      setState(() {
+        isLoading = false;
+      });
   }
 }
 
