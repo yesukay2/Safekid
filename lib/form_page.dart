@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:intl/intl.dart';
 
 enum StatusType { Victim, Witness_Informant }
 
@@ -15,7 +15,7 @@ enum CaseCategory {
   Medical,
   Teen_Marriage,
   Child_Support,
-  Child__Neglect,
+  Child_Neglect,
   Online
 }
 
@@ -33,17 +33,16 @@ bool _validate() {
 }
 
 class _Form_PageState extends State<Form_Page> {
-
   final locationController = TextEditingController();
   final phoneController = TextEditingController();
   final ageController = TextEditingController();
   final commentController = TextEditingController();
+
   final connection = FirebaseFirestore.instance.collection("reports");
 
-  bool victimCheck = true;
+  bool victimCheck = false;
   bool witnessCheck = false;
   bool onlineCheck = false;
-  bool informantCheck = false;
 
   final List<String> onlineList = [
     "Child Pornography",
@@ -113,7 +112,7 @@ class _Form_PageState extends State<Form_Page> {
                                     "I am a",
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                      fontSize: 17,
+                                      fontSize: 16.5,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -123,12 +122,14 @@ class _Form_PageState extends State<Form_Page> {
                                   ),
                                   Expanded(
                                     child: RadioListTile<StatusType>(
-                                        contentPadding: const EdgeInsets.all(0.0),
+                                        contentPadding:
+                                            const EdgeInsets.all(0.0),
                                         toggleable: true,
                                         value: StatusType.Victim,
                                         dense: true,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(17),
+                                          borderRadius:
+                                              BorderRadius.circular(17),
                                           side: BorderSide(
                                             style: BorderStyle.solid,
                                             color: Colors.deepOrange.shade500,
@@ -150,13 +151,15 @@ class _Form_PageState extends State<Form_Page> {
                                   Expanded(
                                     child: RadioListTile<StatusType>(
                                         activeColor: Colors.deepOrange,
-                                        contentPadding: const EdgeInsets.all(0.0),
+                                        contentPadding:
+                                            const EdgeInsets.all(0.0),
                                         toggleable: true,
                                         value: StatusType.Witness_Informant,
                                         groupValue: statusType,
                                         dense: true,
                                         shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(17),
+                                            borderRadius:
+                                                BorderRadius.circular(17),
                                             side: BorderSide(
                                               color: Colors.blue.shade900,
                                             )),
@@ -173,7 +176,8 @@ class _Form_PageState extends State<Form_Page> {
                                   Text(
                                     state.errorText ?? "",
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.error,
+                                      color:
+                                          Theme.of(context).colorScheme.error,
                                     ),
                                   ),
                                 ],
@@ -181,33 +185,54 @@ class _Form_PageState extends State<Form_Page> {
                               SizedBox(
                                 height: 15,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                child: TextFormField(
-                                  controller: ageController,
-                                  validator: (value) {
-                                    print(caseCategory);
-                                    //validate category check
-                                    if(caseCategory == null){
-                                      print('got here');
-                                      setState(() {
-                                        hasErrorMessage = true;
-                                      });
-                                    }
-                                    if (value == null || value == "") {
-                                      return ("Age required!");
-                                    }
-
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                    labelText: victimCheck ? "Enter your age" : "Enter Victim's age",
-                                    prefixIcon: Icon(Icons.perm_contact_calendar),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Age :",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.w300,
                                     ),
                                   ),
-                                ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: TextFormField(
+                                        style: TextStyle(height: 0.5),
+                                        controller: ageController,
+                                        validator: (value) {
+                                          print(caseCategory);
+                                          //validate category check
+                                          if (caseCategory == null) {
+                                            setState(() {
+                                              hasErrorMessage = true;
+                                            });
+                                          }
+                                          if (value == null || value == "") {
+                                            return ("Age required!");
+                                          }
+
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: victimCheck
+                                              ? "Enter your age"
+                                              : "Enter Victim's age",
+                                          prefixIcon:
+                                              Icon(Icons.perm_contact_calendar),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
                                 height: 25,
@@ -386,7 +411,7 @@ class _Form_PageState extends State<Form_Page> {
                           const SizedBox(height: 10),
                           RadioListTile<CaseCategory>(
                               contentPadding: const EdgeInsets.all(0.0),
-                              value: CaseCategory.Child__Neglect,
+                              value: CaseCategory.Child_Neglect,
                               dense: true,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(7),
@@ -429,7 +454,9 @@ class _Form_PageState extends State<Form_Page> {
                           Row(
                             children: [
                               Text(
-                                hasErrorMessage ? 'Please select a category' : '',
+                                hasErrorMessage
+                                    ? 'Please select a category'
+                                    : '',
                                 style: TextStyle(
                                   color: Colors.red,
                                 ),
@@ -442,43 +469,46 @@ class _Form_PageState extends State<Form_Page> {
                           ),
                           onlineCheck
                               ? Padding(
-                            padding: const EdgeInsets.fromLTRB(36.0, 0, 0, 0),
-                            child: DropdownButtonFormField(
-                                validator: (value) {
-                                  if (onlineCheck) {
-                                    if (value == null || value == "") {
-                                      return ("Select option");
-                                    }
-                                    return null;
-                                  }
-                                  return null;
-                                },
-                                hint: Text(
-                                  "Type of Online Abuse",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                icon: const Icon(
-                                    Icons.arrow_drop_down_circle_outlined),
-                                elevation: 10,
-                                items: onlineList.map<DropdownMenuItem<String>>(
-                                        (String dropdownValue) {
-                                      return DropdownMenuItem<String>(
-                                          value: dropdownValue,
-                                          child: Text(dropdownValue));
-                                    }).toList(),
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    dropdownValue = value!;
-                                  });
-                                }),
-                          )
+                                  padding:
+                                      const EdgeInsets.fromLTRB(36.0, 0, 0, 0),
+                                  child: DropdownButtonFormField(
+                                      validator: (value) {
+                                        if (onlineCheck) {
+                                          if (value == null || value == "") {
+                                            return ("Select option");
+                                          }
+                                          return null;
+                                        }
+                                        return null;
+                                      },
+                                      hint: Text(
+                                        "Type of Online Abuse",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                      icon: const Icon(Icons
+                                          .arrow_drop_down_circle_outlined),
+                                      elevation: 10,
+                                      items: onlineList
+                                          .map<DropdownMenuItem<String>>(
+                                              (String dropdownValue) {
+                                        return DropdownMenuItem<String>(
+                                            value: dropdownValue,
+                                            child: Text(dropdownValue));
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          dropdownValue = value!;
+                                        });
+                                      }),
+                                )
                               : Container(),
                           const SizedBox(
                             height: 25,
                           ),
                           TextFormField(
                             controller: locationController,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value == "") {
                                 return ("Location required!");
@@ -496,12 +526,13 @@ class _Form_PageState extends State<Form_Page> {
                           TextFormField(
                             controller: phoneController,
                             keyboardType: TextInputType.phone,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (value){
-                              if(value==""){
-                                return("Phone number required!");
-                              }else if(value?.length!=10){
-                                return("Invalid Phone number!");
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == "") {
+                                return ("Phone number required!");
+                              } else if (value?.length != 10) {
+                                return ("Invalid Phone number!");
                               }
                             },
                             decoration: const InputDecoration(
@@ -523,7 +554,8 @@ class _Form_PageState extends State<Form_Page> {
                               height: 1.5,
                             ),
                             decoration: const InputDecoration(
-                                labelText: "Optional: Describe the said incident",
+                                labelText:
+                                    "Optional: Describe the said incident",
                                 prefixIcon: Icon(Icons.insert_comment_outlined),
                                 isDense: true,
                                 border: OutlineInputBorder()),
@@ -551,64 +583,73 @@ class _Form_PageState extends State<Form_Page> {
                               label: Text("Submit Report"),
                             ),
                           ),
+
                         ],
                       ),
                     ),
                   );
                 },
-                // validator: (value) {
-                //   if (statusType == "" || statusType == null) {
-                //     return ("Status Required!");
-                //   } else
-                //     return null;
-                // },
               ),
             ),
           ),
-          true ? Container(
-            color: Colors.grey.withOpacity(0.6),
-            child: Center(
-              child: SizedBox(
-                height: 50,
-                width: 50,
-                child: CircularProgressIndicator(),
-              )
-            ),
-          ) : SizedBox.shrink()
+
+          isLoading
+              ? Container(
+                  color: Colors.grey.withOpacity(0.6),
+                  child: Center(
+                      child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.deepOrange,
+                      color: Colors.blueAccent,
+                    ),
+                  )),
+                )
+              : SizedBox.shrink()
         ],
       ),
     );
   }
 
-
   void reportCase() async {
-    print(_formKey.currentState);
     setState(() {
       hasErrorMessage = false;
     });
-    if (_validate() == true) {
-      setState(() {
-        isLoading = true;
-      });
-      await connection.add({
-        'user_id': userId!,
-        'status': statusType.name,
-        'location': locationController.text,
-        'phone': phoneController.text,
-        'timestamp': Timestamp.now(),
-        'case_category': caseCategory!.name,
-        'age': ageController.text,
-        'online_category': dropdownValue,
-        'comment': commentController.text,
-      });
+    try {
+      if (_validate()) {
+        setState(() {
+          isLoading = true;
+        });
+        await connection.add({
+          'user_id': userId!,
+          'status': statusType.name,
+          'location': locationController.text,
+          'phone': phoneController.text,
+          'timestamp': DateFormat('MMM d, yyyy').format(DateTime.now()),
+          'case_category': caseCategory!.name,
+          'age': ageController.text,
+          'online_category': dropdownValue,
+          'comment': commentController.text,
+        });
 
-
-      Fluttertoast.showToast(msg: "Report Submitted Successfully");
-      Navigator.of(context).pop();
-    }else
-      setState(() {
-        isLoading = false;
-      });
+        Fluttertoast.showToast(
+            msg: "Report Submitted Successfully",
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.red.shade500,
+            toastLength: Toast.LENGTH_LONG);
+        Navigator.of(context).pop();
+      } else
+        setState(() {
+          isLoading = false;
+        });
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+          msg: e.message.toString(),
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.red.shade500,
+          toastLength: Toast.LENGTH_LONG);
+    }
   }
 }
 

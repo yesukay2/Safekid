@@ -44,7 +44,7 @@ dependencies:
   survey_kit: ^0.1.1
   cloud_firestore: ^4.3.1
   firebase_ui_firestore: ^1.2.3
-  fluttertoast: ^8.1.2
+  fluttertoast: ^8.1.2   #to be removed
   http: ^0.13.5
   firebase_messaging: ^14.2.1
   animated_text_kit: ^4.2.2
@@ -54,6 +54,8 @@ dependencies:
   animated_splash_screen:
   flutter_easyloading: ^3.0.5
   step_progress_indicator: ^1.0.2
+  bulleted_list: ^0.0.1+0.1a
+  intl: ^0.17.0
 
 
 

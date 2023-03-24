@@ -16,7 +16,6 @@ class SignUp_Page extends StatefulWidget {
 }
 
 class _SignUp_PageState extends State<SignUp_Page> {
-
   //form key
   final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
@@ -71,117 +70,221 @@ class _SignUp_PageState extends State<SignUp_Page> {
                 const SizedBox(
                   height: 30,
                 ),
-                Login_Textfield(
-                  controller: firstNameController,
-                  hintText: "Firstname",
-                  obscureText: false,
-                  validate: (value){
-                    if(value!.isEmpty){
-                      return("Lastname Required");
-                    }
-                    return null;
-                  },
-                  onSaved: (value){
-                    firstNameController.text = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    controller: firstNameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepOrange),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                      label: Text("Firstname"),
+                    ),
+                    obscureText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ("Firstname Required");
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      firstNameController.text = value!;
+                    },
+                  ),
                 ),
-                Login_Textfield(
-                  controller: lastNameController,
-                  hintText: "Lastname",
-                  obscureText: false,
-                  validate: (value){
-                    if(value!.isEmpty){
-                      return("Lastname Required");
-                    }
-                    return null;
-                  },
-                  onSaved: (value){
-                    lastNameController.text = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    controller: lastNameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("Lastname"),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepOrange),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                    ),
+                    obscureText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ("Lastname Required");
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      lastNameController.text = value!;
+                    },
+                  ),
                 ),
-                Login_Textfield(
-                  controller: emailController,
-                  hintText: "E-mail",
-                  obscureText: false,
-                  validate: (value){
-                    if(value!.isEmpty){
-                      return("E-mail required!");
-                    }if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                    .hasMatch(value)){
-                      return("Invalid E-mail");
-                    }
-                  },
-                  onSaved: (value){
-                    emailController.text = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("E-mail"),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepOrange),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                    ),
+                    obscureText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ("E-mail required!");
+                      }
+                      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                          .hasMatch(value)) {
+                        return ("Invalid E-mail");
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      emailController.text = value!;
+                    },
+                  ),
                 ),
-                Login_Textfield(
-                  controller: phoneController,
-                  hintText: "Phone Number",
-                  obscureText: false,
-                  validate: (value){
-                    if(value!.isEmpty){
-                      return "Phone Number required";
-                    }else if(!RegExp(r'^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$').hasMatch(value)){
-                      return "Invalid Phone Number";
-                    }
-                  },
-                  onSaved: (value){
-                    phoneController.text = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    controller: phoneController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("Phone Number"),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepOrange),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                    ),
+                    obscureText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Phone Number required";
+                      } else if (!RegExp(
+                              r'^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$')
+                          .hasMatch(value)) {
+                        return "Invalid Phone Number";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      phoneController.text = value!;
+                    },
+                  ),
                 ),
-                Login_Textfield(
-                  controller: passwordController,
-                  hintText: "Password",
-                  obscureText: true,
-                  validate: (value){
-                    RegExp regex = RegExp(r'^.{6,}$');
-                    if(value!.isEmpty){
-                      return("Password Required");
-                    }
-                    if(!regex.hasMatch(value)){
-                      return("Invalid Password(Min. 6 characters");
-                    }
-                  },
-                  onSaved: (value){
-                    passwordController.text = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("Password"),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepOrange),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      RegExp regex = RegExp(r'^.{6,}$');
+                      if (value!.isEmpty) {
+                        return ("Password Required");
+                      }
+                      if (!regex.hasMatch(value)) {
+                        return ("Invalid Password(Min. 6 characters");
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      passwordController.text = value!;
+                    },
+                  ),
                 ),
-                Login_Textfield(
-                  controller: confirmPasswordController,
-                  hintText: "Confirm Password",
-                  obscureText: true,
-                  validate: (value) {
-                    if (passwordController.text !=
-                        confirmPasswordController.text) {
-                      return "Passwords don't match";
-                    }
-                    return null;
-                  },
-                  onSaved: (value){
-                    confirmPasswordController.text = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    controller: confirmPasswordController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("Confirm Password"),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepOrange),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      if (passwordController.text !=
+                          confirmPasswordController.text) {
+                        return "Passwords don't match";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      confirmPasswordController.text = value!;
+                    },
+                  ),
                 ),
                 const SizedBox(height: 45),
-
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrangeAccent,
+                    backgroundColor: Colors.deepOrange,
                   ),
                   onPressed: () {
                     signUpAction(emailController.text, passwordController.text);
                   },
-                  child:
-                  const Text("Register",
+                  child: const Text(
+                    "Register",
                     style: TextStyle(
-                      fontWeight: FontWeight.w900,
+                      // fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
-
-                ),),
-                isLoading ? const CircularProgressIndicator(color: Colors.lightBlue, backgroundColor: Colors.deepOrange,) : const SizedBox.shrink(),
-
-
+                  ),
+                ),
+                isLoading
+                    ? const CircularProgressIndicator(
+                        color: Colors.lightBlue,
+                        backgroundColor: Colors.deepOrange,
+                      )
+                    : const SizedBox.shrink(),
                 const SizedBox(height: 45),
                 const Text("Already have an account?"),
                 const SizedBox(height: 5),
@@ -200,19 +303,18 @@ class _SignUp_PageState extends State<SignUp_Page> {
     );
   }
 
-
-
   void signUpAction(String email, String password) async {
     setState(() {
       isLoading = true;
     });
     if (_formKey.currentState!.validate()) {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password)
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
-        postDetailsToFirestore(),
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
+                postDetailsToFirestore(),
+              })
+          .catchError((e) {
+        Fluttertoast.showToast(msg: e!.message, gravity: ToastGravity.CENTER);
       });
     } else {
       setState(() {
@@ -221,8 +323,7 @@ class _SignUp_PageState extends State<SignUp_Page> {
     }
   }
 
-  postDetailsToFirestore() async
-  {
+  postDetailsToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
@@ -237,13 +338,11 @@ class _SignUp_PageState extends State<SignUp_Page> {
         .collection('users')
         .doc(user.uid)
         .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Account created successfully");
+    Fluttertoast.showToast(msg: "Account created successfully", gravity: ToastGravity.CENTER);
 
     // ignore: use_build_context_synchronously
-    Navigator.pushAndRemoveUntil(
-        context, MaterialPageRoute(builder: (context) => HomePage()), (
-        route) => false);
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
     return;
   }
-
 }

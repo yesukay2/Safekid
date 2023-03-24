@@ -1,21 +1,26 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:safekid/about_page.dart';
 import 'package:safekid/form_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:safekid/library.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.blueGrey.shade50,
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: signOutAction, icon: const Icon(Icons.logout))
+          IconButton(
+              onPressed: () => scaffoldKey.currentState!.openEndDrawer(),
+              icon: const Icon(Icons.menu_rounded))
         ],
         backgroundColor: Colors.blueGrey,
         leading: Image.asset(
@@ -26,9 +31,59 @@ class HomePage extends StatelessWidget {
         leadingWidth: 100,
         title: const Text(
           "Safekid",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
+      ),
+      endDrawer: Drawer(
+        // shape: ShapeBorder,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage("lib/images/profile_icon.png"),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    //ToDo Change text to user name
+                    'John Doe',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.library_books_outlined),
+              title: Text('Cases'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>UserRecordsWidget()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.account_balance_outlined),
+              title: Text('About Us'),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) =>AboutPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.lock_outline),
+              title: Text('Sign Out'),
+              onTap: () {
+                signOutAction();
+              },
+            ),
+          ],
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -62,13 +117,13 @@ class HomePage extends StatelessWidget {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Form_Page()));
               },
-              icon: Icon(Icons.report_gmailerrorred_outlined,
-                size:30,
+              icon: Icon(
+                Icons.report_gmailerrorred_outlined,
+                size: 30,
               ),
-              label: Text("Report Case",
-                style: TextStyle(
-                  fontSize: 18
-                ),
+              label: Text(
+                "Report Case",
+                style: TextStyle(fontSize: 18),
               ),
             ),
           ),
@@ -111,20 +166,9 @@ class HomePage extends StatelessWidget {
                         textStyle: TextStyle(
                             fontFamily: "Arima",
                             fontSize: 20,
-                            color: Colors.blue.shade900
-                        )),
+                            color: Colors.blue.shade900)),
                   ],
                 ),
-                // const SizedBox(height: 20,),
-
-                // Text("THE GREATEST GIFT TO EVERY CHILD IS A GIFT OF \"MYSELF\"",
-                // textAlign: TextAlign.center,
-                // style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                //   color: Colors.grey.shade800,
-                // ),),
-                // Text("~ Bright Appiah",
-                //   style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.grey.shade600),
-                // )
               ],
             ),
           ),
@@ -182,24 +226,3 @@ class BottomWaveClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// class HomePage extends StatelessWidget {
-//   const HomePage({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         actions: [IconButton(onPressed: signOutAction, icon: Icon(Icons.logout))],
-//       ),
-//       body: const Center(
-//         child: Text("Logged In"),
-//       ),
-//     );
-//   }
-//
-//   void signOutAction() {
-//     FirebaseAuth.instance.signOut();
-//   }
-// }
