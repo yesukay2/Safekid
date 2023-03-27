@@ -23,6 +23,7 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
   bool isLoading = false;
   final userId = FirebaseAuth.instance.currentUser!.uid;
   var displayName;
+  bool isComplete = false;
 
 
 
@@ -52,7 +53,6 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
   Future<void> _getUserRecords() async {
     setState(() {
       isLoading = true;
-      print("set to true");
     });
 
     User? user = _auth.currentUser;
@@ -83,7 +83,6 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
       displayName = userDoc['firstName'];
       return(displayName);
     });
-      print(displayName);
   }
 
   @override
@@ -177,16 +176,41 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
           ListView.builder(
           itemCount: _userRecords.length,
           itemBuilder: (context, index) {
-            Map<String?, dynamic> record = _userRecords[index];
-            var time = record['timestamp'] as Timestamp;
+            Map<String?,dynamic> record = _userRecords[index];
+            Timestamp time = record['timestamp'];
             DateTime date = time.toDate();
-            return SizedBox(
-              width: 500,
-              child: ListTile(
-                title: Text(record['status']),
-                subtitle: Text(record['case_category']),
-                trailing: Text('(${date.day}/${date.month}/${date.year}'),
+            return Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 500,
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          Text("Status: ", style: TextStyle(fontSize: 12,color: Colors.deepOrange),),
+                          const SizedBox(width: 12,),
+                          Text(record['status']),
+                        ],
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Text("Category: ", style: TextStyle(fontSize: 12, color: Colors.blue),),
+                          const SizedBox(width: 1,),
+                          Text(record['case_category'], style: TextStyle(fontSize: 13),),
+                        ],
+                      ),
+                      trailing: Column(
+                        children: [
+                          Text('${date.day}/${date.month}/${date.year}'),
+                          isComplete ? Icon(Icons.check_box_outlined): Icon(Icons.indeterminate_check_box_outlined),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(color: Colors.deepOrange,),
+                ],
               ),
+
             );
           },
         ),

@@ -205,7 +205,7 @@ class _Form_PageState extends State<Form_Page> {
                                         style: TextStyle(height: 0.5),
                                         controller: ageController,
                                         validator: (value) {
-                                          print(caseCategory);
+                                          // print(caseCategory);
                                           //validate category check
                                           if (caseCategory == null) {
                                             setState(() {
