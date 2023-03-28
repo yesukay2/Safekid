@@ -1,15 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safekid/about_page.dart';
+import 'package:safekid/auth_page.dart';
 import 'package:safekid/form_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:safekid/library.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchDisplayName();
+  }
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final userId = FirebaseAuth.instance.currentUser?.uid;
+  var displayName;
+
+
+  fetchDisplayName() async {
+    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get();
+    setState(() {
+      displayName = userDoc['firstName'];
+      return(displayName);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +77,7 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    //ToDo Change text to user name
-                    'John Doe',
+                    '${displayName}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -195,6 +221,7 @@ class HomePage extends StatelessWidget {
 
   void signOutAction() {
     FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AuthPage()), (route) => route.isFirst);
   }
 }
 

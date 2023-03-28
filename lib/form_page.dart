@@ -299,10 +299,8 @@ class _Form_PageState extends State<Form_Page> {
                                     color: Colors.deepOrange.shade500,
                                   )),
                               groupValue: caseCategory,
-                              // tileColor: Colors.deepOrange.shade100,
                               title: Text(CaseCategory.Molestation.name),
                               onChanged: (value) {
-                                // print(value);
                                 setState(() {
                                   caseCategory = value!;
                                   onlineCheck = false;

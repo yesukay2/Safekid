@@ -7,16 +7,42 @@ import 'package:safekid/auth_page.dart';
 import 'package:safekid/home_page.dart';
 import 'library.dart';
 
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatefulWidget {
+  @override
+  State<AboutPage> createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State<AboutPage> {
+  @override
+  void initState() {
+    super.initState();
+    fetchDisplayName();
+  }
+
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final connection = FirebaseFirestore.instance.collection("users");
+  final userId = FirebaseAuth.instance.currentUser?.uid;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  var displayName;
+
+
+  fetchDisplayName() async {
+    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get();
+    setState(() {
+      displayName = userDoc['firstName'];
+      return(displayName);
+    });
+  }
+
   // QuerySnapshot snapshot = await connection
   @override
   Widget build(BuildContext context) {
   void signOutAction() {
     FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthPage()));
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AuthPage()), (route) => route.isFirst);
   }
     return Scaffold(
       key: scaffoldKey,
@@ -52,8 +78,7 @@ class AboutPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    //ToDo Change text to user name
-                    'John Doe',
+                    '${displayName}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -78,14 +103,7 @@ class AboutPage extends StatelessWidget {
 
               },
             ),
-            // ListTile(
-            //   leading: Icon(Icons.info_outlined),
-            //   title: Text('About Us'),
-            //   onTap: () {
-            //     Navigator.push(
-            //         context, MaterialPageRoute(builder: (context) =>AboutPage()));
-            //   },
-            // ),
+
             ListTile(
               leading: Icon(Icons.lock_outline),
               title: Text('Sign Out'),
@@ -132,142 +150,146 @@ class AboutPage extends StatelessWidget {
               Text(
                 'Steps to take when you notice any instance of Child Abuse',
                 style: TextStyle(
-                    fontSize: 22.0,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.w100,
                     color: Colors.red,
-                decoration: TextDecoration.underline),
+                decoration: TextDecoration.underline,
+
+                ),
                 textAlign: TextAlign.center,
               ),
               BulletedList(
                 listItems: [
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
+                  "step 1",
+                  "step 2",
+                  "step 3",
+                  "step 4",
+                  "step 5",
                 ],
-                bullet: Icon(Icons.tag_outlined, color: Colors.blueAccent,size: 18,),
+                bullet: Icon(Icons.play_arrow_rounded, color: Colors.deepOrange,size: 18,),
                 style: TextStyle(),
               ),
               SizedBox(
-                height: 16,
+                height: 50,
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Text(
-                  'Contact Us:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w200,
-                    decoration: TextDecoration.underline
+
+                Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    'Contact Us:',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w200,
+                        decoration: TextDecoration.underline
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 12.0),
-              Row(
-                children: [
-                  Icon(Icons.location_on_outlined),
-                  SizedBox(width: 4.0),
-                  Text(
-                    'Address ',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.deepOrange,
+                SizedBox(height: 12.0),
+                Row(
+                  children: [
+                    Icon(Icons.location_on_outlined,size: 20,),
+                    SizedBox(width: 4.0),
+                    Text(
+                      'Address ',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.deepOrange,
+                      ),
                     ),
-                  ),
-                  Text(
-                    ": Adumua St",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.blueAccent
+                    Text(
+                      ": Adumua St",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.blueAccent
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4.0),
-              Row(
-                children: [
-                  Icon(Icons.location_city_rounded),
-                  SizedBox(width: 4.0),
-                  Text(
-                    "City ",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.deepOrange,
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    Icon(Icons.location_city_rounded, size: 20,),
+                    SizedBox(width: 4.0),
+                    Text(
+                      "City ",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.deepOrange,
+                      ),
                     ),
-                  ),
-                  Text(
-                    ": Dzorwulu, Accra ",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.blueAccent
+                    Text(
+                      ": Dzorwulu, Accra ",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.blueAccent
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4.0),
-              Row(
-                children: [
-                  Icon(Icons.map_outlined),
-                  SizedBox(width: 4.0),
-                  Text(
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    Icon(Icons.map_outlined,size: 20,),
+                    SizedBox(width: 4.0),
+                    Text(
                       "Region ",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.deepOrange,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.deepOrange,
+                      ),
                     ),
-                  ),
-                  Text(
-                    ": Greater Accra ",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.blueAccent
+                    Text(
+                      ": Greater Accra ",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.blueAccent
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4.0),
-              Row(
-                children: [
-                  Icon(Icons.phone_iphone),
-                  SizedBox(width: 4.0),
-                  Text(
-                    "Phone ",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.deepOrange,
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    Icon(Icons.phone_iphone, size: 20,),
+                    SizedBox(width: 4.0),
+                    Text(
+                      "Phone ",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.deepOrange,
+                      ),
                     ),
-                  ),
-                  Text(
-                    ": 0302503744",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.blueAccent
+                    Text(
+                      ": 0302503744",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.blueAccent
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4.0),
-              Row(
-                children: [
-                  Icon(Icons.email_outlined),
-                  SizedBox(width: 4.0),
-                  Text(
-                    "E-mail ",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.deepOrange,
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    Icon(Icons.email_outlined, size: 20,),
+                    SizedBox(width: 4.0),
+                    Text(
+                      "E-mail ",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.deepOrange,
+                      ),
                     ),
-                  ),
-                  Text(
-                    ": info@crighana.org ",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.blueAccent
+                    Text(
+                      ": info@crighana.org ",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.blueAccent
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+
 
               const SizedBox(height: 50,),
               Container(

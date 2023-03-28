@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:safekid/auth_page.dart';
 import 'about_page.dart';
 import 'home_page.dart';
 
@@ -23,7 +24,7 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
   bool isLoading = false;
   final userId = FirebaseAuth.instance.currentUser!.uid;
   var displayName;
-  bool isComplete = false;
+  bool isComplete = true;
 
 
 
@@ -33,22 +34,8 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
 
   void signOutAction() {
     FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>AuthPage()), (route) => route.isFirst);
   }
-
-  // Future<String?> _getUserData() async {
-  //   final String uid = FirebaseAuth.instance.currentUser!.uid;
-  //   final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  //   setState(() {
-  //     _userName = (userDoc.data() as Map )['name'];
-  //   });
-  //   return(_userName);
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getUserRecords();
-  // }
 
   Future<void> _getUserRecords() async {
     setState(() {
@@ -196,13 +183,14 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
                         children: [
                           Text("Category: ", style: TextStyle(fontSize: 12, color: Colors.blue),),
                           const SizedBox(width: 1,),
-                          Text(record['case_category'], style: TextStyle(fontSize: 13),),
+                          Text(record['case_category'] ?? "", style: TextStyle(fontSize: 13),),
                         ],
                       ),
                       trailing: Column(
                         children: [
                           Text('${date.day}/${date.month}/${date.year}'),
-                          isComplete ? Icon(Icons.check_box_outlined): Icon(Icons.indeterminate_check_box_outlined),
+                          const  SizedBox(height: 10,),
+                          isComplete ? Icon(Icons.check_box_outlined, color: Colors.green,): Icon(Icons.indeterminate_check_box_outlined, color: Colors.orangeAccent.shade200,),
                         ],
                       ),
                     ),
