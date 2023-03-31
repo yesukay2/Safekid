@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,30 +24,32 @@ class _AboutPageState extends State<AboutPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   var displayName;
 
-
   fetchDisplayName() async {
-    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .get();
+    final DocumentSnapshot userDoc =
+    await FirebaseFirestore.instance.collection('users').doc(userId).get();
     setState(() {
       displayName = userDoc['firstName'];
-      return(displayName);
+      return (displayName);
     });
   }
 
   // QuerySnapshot snapshot = await connection
   @override
   Widget build(BuildContext context) {
-  void signOutAction() {
-    FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AuthPage()), (route) => route.isFirst);
-  }
+    void signOutAction() {
+      FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => AuthPage()),
+              (route) => route.isFirst);
+    }
+
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: ()=>scaffoldKey.currentState!.openEndDrawer(), icon: const Icon(Icons.menu))
+          IconButton(
+              onPressed: () => scaffoldKey.currentState!.openEndDrawer(),
+              icon: const Icon(Icons.menu))
         ],
         backgroundColor: Colors.blueGrey,
         leading: Image.asset(
@@ -91,19 +92,20 @@ class _AboutPageState extends State<AboutPage> {
               leading: Icon(Icons.home_outlined),
               title: Text('Home'),
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) =>HomePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
               },
             ),
             ListTile(
               leading: Icon(Icons.library_books_outlined),
               title: Text('Cases'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>UserRecordsWidget()));
-
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserRecordsWidget()));
               },
             ),
-
             ListTile(
               leading: Icon(Icons.lock_outline),
               title: Text('Sign Out'),
@@ -111,7 +113,6 @@ class _AboutPageState extends State<AboutPage> {
                 signOutAction();
               },
             ),
-
           ],
         ),
       ),
@@ -128,10 +129,10 @@ class _AboutPageState extends State<AboutPage> {
                     'Mission',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.w200,
-                      decoration: TextDecoration.underline
-                    ),
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.w200,
+                        decoration: TextDecoration.underline,
+                    color: Colors.deepOrange),
                   ),
                 ],
               ),
@@ -140,162 +141,211 @@ class _AboutPageState extends State<AboutPage> {
                 'Our mission is to promote and protect the inherent dignity of every child, and address the fundamental needs of children',
                 style: TextStyle(
                   fontSize: 16.0,
+                  height: 1.5,
+                  color:Colors.blueGrey.shade900,
                 ),
               ),
               SizedBox(height: 16.0),
               SizedBox(
-                height: 16,
+                height: 1,
               ),
-
               Text(
                 'Steps to take when you notice any instance of Child Abuse',
                 style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w100,
-                    color: Colors.red,
-                decoration: TextDecoration.underline,
-
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w100,
+                  color: Colors.deepOrange,
+                  decoration: TextDecoration.underline,
                 ),
                 textAlign: TextAlign.center,
               ),
               BulletedList(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 listItems: [
-                  "step 1",
-                  "step 2",
-                  "step 3",
-                  "step 4",
-                  "step 5",
+                  "Identify instance of abuse",
+                  "Report case to Child Rights Int. using Safekid App",
+                  "Await referral",
+                  "Follow up on case",
                 ],
-                bullet: Icon(Icons.play_arrow_rounded, color: Colors.deepOrange,size: 18,),
-                style: TextStyle(),
+                bullet: Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.deepOrange,
+                  size: 18,
+                ),
+                style: TextStyle(
+                    fontSize: 16, fontFamily: "Merriweather",
+                  color: Colors.blueGrey.shade900,
+                ),
               ),
               SizedBox(
-                height: 50,
+                height: 80,
               ),
-
-                Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'Contact Us:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w200,
-                        decoration: TextDecoration.underline
-                    ),
-                  ),
-                ),
-                SizedBox(height: 12.0),
-                Row(
-                  children: [
-                    Icon(Icons.location_on_outlined,size: 20,),
-                    SizedBox(width: 4.0),
-                    Text(
-                      'Address ',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.deepOrange,
-                      ),
-                    ),
-                    Text(
-                      ": Adumua St",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.blueAccent
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.0),
-                Row(
-                  children: [
-                    Icon(Icons.location_city_rounded, size: 20,),
-                    SizedBox(width: 4.0),
-                    Text(
-                      "City ",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.deepOrange,
-                      ),
-                    ),
-                    Text(
-                      ": Dzorwulu, Accra ",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.blueAccent
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.0),
-                Row(
-                  children: [
-                    Icon(Icons.map_outlined,size: 20,),
-                    SizedBox(width: 4.0),
-                    Text(
-                      "Region ",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.deepOrange,
-                      ),
-                    ),
-                    Text(
-                      ": Greater Accra ",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.blueAccent
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.0),
-                Row(
-                  children: [
-                    Icon(Icons.phone_iphone, size: 20,),
-                    SizedBox(width: 4.0),
-                    Text(
-                      "Phone ",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.deepOrange,
-                      ),
-                    ),
-                    Text(
-                      ": 0302503744",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.blueAccent
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.0),
-                Row(
-                  children: [
-                    Icon(Icons.email_outlined, size: 20,),
-                    SizedBox(width: 4.0),
-                    Text(
-                      "E-mail ",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.deepOrange,
-                      ),
-                    ),
-                    Text(
-                      ": info@crighana.org ",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.blueAccent
-                      ),
-                    ),
-                  ],
-                ),
-
-
-              const SizedBox(height: 50,),
               Container(
-                child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: Text('App developed by Yesu K. Apraku'),
+                alignment: FractionalOffset.bottomCenter,
+                decoration: BoxDecoration(color: Colors.deepOrange.shade500),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 8, 50, 8),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Contact Us:',
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w200,
+                            decoration: TextDecoration.underline),
+                      ),
+                      SizedBox(height: 5.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            size: 20,
+                          ),
+                          SizedBox(width: 4.0),
+                          Text(
+                            'Address ',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white54,
+                            ),
+                          ),
+                          Text(
+                            ": Adumua St",
+                            style:
+                            TextStyle(fontSize: 16.0, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_city_rounded,
+                            size: 20,
+                          ),
+                          SizedBox(width: 4.0),
+                          Text(
+                            "City ",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white54,
+                            ),
+                          ),
+                          Text(
+                            ": Dzorwulu, Accra ",
+                            style:
+                            TextStyle(fontSize: 16.0, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.map_outlined,
+                            size: 20,
+                          ),
+                          SizedBox(width: 4.0),
+                          Text(
+                            "Region ",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white54,
+                            ),
+                          ),
+                          Text(
+                            ": Greater Accra ",
+                            style:
+                            TextStyle(fontSize: 16.0, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.phone_iphone,
+                            size: 20,
+                          ),
+                          SizedBox(width: 4.0),
+                          Text(
+                            "Phone ",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white54,
+                            ),
+                          ),
+                          Text(
+                            ": 0302503744",
+                            style:
+                            TextStyle(fontSize: 16.0, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.email_outlined,
+                            size: 20,
+                          ),
+                          SizedBox(width: 4.0),
+                          Text(
+                            "E-mail ",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white54,
+                            ),
+                          ),
+                          Text(
+                            ": info@crighana.org ",
+                            style:
+                            TextStyle(fontSize: 16.0, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+
+                      Container(
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: FractionalOffset.bottomCenter,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 30.0),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.copyright_outlined, color: Colors.white70,),
+                                    Text(
+                                      'Child Rights International',
+                                      style: TextStyle(
+                                          color: Colors.white54,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.white54,
+                            ),
+                            Align(
+                              alignment: FractionalOffset.bottomCenter,
+                              child: Text(
+                                'App developed by Yesu K. Apraku',
+                                style: TextStyle(
+                                    color: Colors.white54,
+                                    fontStyle: FontStyle.italic
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

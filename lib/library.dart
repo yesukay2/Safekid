@@ -46,7 +46,7 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
 
     if (user != null) {
       QuerySnapshot snapshot = await _firestore
-          .collection('reports')
+          .collection('reports').orderBy("timestamp", descending: true)
           .where('user_id', isEqualTo: user.uid)
           .get();
       List<Map<String?, dynamic>> cases = [];
