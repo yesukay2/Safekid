@@ -23,8 +23,11 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   bool isLoading = false;
   final userId = FirebaseAuth.instance.currentUser!.uid;
+
   var displayName;
-  bool isComplete = true;
+
+  //todo implement responsive status
+  bool isCompleted = true;
 
 
 
@@ -59,6 +62,18 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
       });
     }
   }
+
+  // Todo use stream builder to display based on status read from firebase
+
+  Stream<String> getReportStatusStream() {
+    final reportRef = FirebaseFirestore.instance.collection('reports').doc();
+
+    return reportRef.snapshots().map((snapshot) {
+      final isCompleted = snapshot.get('isCompleted') as bool;
+      return isCompleted.toString();
+    });
+  }
+
 
 
   fetchDisplayName() async {
@@ -190,8 +205,54 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
                         children: [
                           Text('${date.day}/${date.month}/${date.year}'),
                           const  SizedBox(height: 10,),
-                          isComplete ? Icon(Icons.check_box_outlined, color: Colors.green,): Icon(Icons.indeterminate_check_box_outlined, color: Colors.orangeAccent.shade200,),
-                        ],
+                      // StreamBuilder<String>(
+                      //   stream: getReportStatusStream('documentId'),
+                      //   builder: (context, snapshot) {
+                      //     if (!snapshot.hasData) {
+                      //       // Display loading spinner or placeholder text
+                      //       return CircularProgressIndicator();
+                      //     }
+                      //
+                      //     final reportStatus = snapshot.data!;
+                      //
+                      //     if (reportStatus == true) {
+                      //       // Display "completed" message
+                      //       return Text('Completed.');
+                      //     } else {
+                      //       // Display "processing" message
+                      //       return Text('Processing.');
+                      //     }
+                      //   },
+                      // ),
+                          // isComplete ? Text("Completed", style: TextStyle(color: Colors.green),): Text("Processing", style: TextStyle(color: Colors.orangeAccent.shade200,)),
+                      StreamBuilder<String>(
+                        stream: getReportStatusStream(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            // Display loading spinner or placeholder text\
+                            var statusRef = record['isCompleted'];
+                            var status = statusRef ? Text("Resolved", style: TextStyle(
+                              color: Colors.green,
+                            ),) : Text("Processing", style: TextStyle(
+                              color: Colors.yellow.shade800,
+                            ),);
+
+                          return (status);
+                          }
+
+                          final reportStatus = snapshot.data!;
+
+                          if (reportStatus == 'true') {
+                            // Display "completed" message
+                            return Text('Completed');
+                          } else {
+                            // Display "processing" message
+                            return Text('Processing');
+                          }
+                        },
+                      ),
+
+                      ],
                       ),
                     ),
                   ),

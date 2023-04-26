@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 
 enum StatusType { Victim, Witness_Informant }
 
@@ -16,6 +15,7 @@ enum CaseCategory {
   Teen_Marriage,
   Child_Support,
   Child_Neglect,
+  Suicidal,
   Online
 }
 
@@ -59,7 +59,7 @@ class _Form_PageState extends State<Form_Page> {
   String? get userId => FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = false;
 
-  StatusType statusType = StatusType.Victim;
+  StatusType? statusType;
   CaseCategory? caseCategory;
 
   bool hasErrorMessage = false;
@@ -426,6 +426,26 @@ class _Form_PageState extends State<Form_Page> {
                               });
                             }),
                         const SizedBox(height: 10),
+                              RadioListTile<CaseCategory>(
+                                  contentPadding: const EdgeInsets.all(0.0),
+                                  value: CaseCategory.Suicidal,
+                                  dense: true,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7),
+                                      side: BorderSide(
+                                        color: Colors.blue.shade900,
+                                      )),
+                                  groupValue: caseCategory,
+                                  // tileColor: Colors.blue.shade100,
+                                  title: Text("Suicidal"),
+                                  onChanged: (value) {
+                                    // print(value);
+                                    setState(() {
+                                      caseCategory = value!;
+                                      onlineCheck = false;
+                                    });
+                                  }),
+                        const SizedBox(height: 10,),
                         RadioListTile<CaseCategory>(
                             contentPadding: const EdgeInsets.all(0.0),
                             value: CaseCategory.Online,
@@ -622,7 +642,7 @@ class _Form_PageState extends State<Form_Page> {
         });
         await connection.add({
           'user_id': userId!,
-          'status': statusType.name,
+          'status': statusType!.name,
           'location': locationController.text,
           'phone': phoneController.text,
           'timestamp': DateTime.now(),
@@ -653,30 +673,3 @@ class _Form_PageState extends State<Form_Page> {
   }
 }
 
-// class BottomWaveClipper extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     var path = Path();
-//     path.lineTo(0.0, size.height - 15);
-//
-//     var firstControlPoint = Offset(size.width / 4, size.height);
-//     var firstEndPoint = Offset(size.width / 2.25, size.height - 10.0);
-//     path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-//         firstEndPoint.dx, firstEndPoint.dy);
-//
-//     var secondControlPoint =
-//         Offset(size.width - (size.width / 3.25), size.height - 1);
-//     var secondEndPoint = Offset(size.width, size.height - 5);
-//     path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
-//         secondEndPoint.dx, secondEndPoint.dy);
-//
-//     path.lineTo(size.width, size.height - 40);
-//     path.lineTo(size.width, 0.0);
-//     path.close();
-//
-//     return path;
-//   }
-//
-//   @override
-//   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-// }
