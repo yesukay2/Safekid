@@ -63,7 +63,6 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
     }
   }
 
-  // Todo use stream builder to display based on status read from firebase
 
   Stream<String> getReportStatusStream() {
     final reportRef = FirebaseFirestore.instance.collection('reports').doc();
@@ -71,6 +70,21 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
     return reportRef.snapshots().map((snapshot) {
       final isCompleted = snapshot.get('isCompleted') as bool;
       return isCompleted.toString();
+    });
+  }
+
+  Stream<List<Widget>> getPartyHandlerStream(){
+    final reportRef = FirebaseFirestore.instance.collection('reports').doc();
+
+    return reportRef.snapshots().map((snapshot) {
+      final social_Welfare = snapshot.get('social_Welfare');
+      final DOVVSU = snapshot.get('DOVVSU');
+      final CHRAJ = snapshot.get('CHRAJ');
+      final family_Court = snapshot.get('family_Court');
+      final Ghana_Police = snapshot.get('Ghana_Police');
+
+      return [social_Welfare, DOVVSU, CHRAJ, family_Court, Ghana_Police];
+
     });
   }
 
@@ -194,43 +208,64 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
                           Text(record['status']),
                         ],
                       ),
-                      subtitle: Row(
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Category: ", style: TextStyle(fontSize: 12, color: Colors.blue),),
-                          const SizedBox(width: 1,),
-                          Text(record['case_category'] ?? "", style: TextStyle(fontSize: 13),),
+                      const SizedBox(height: 5,),
+                          Row(
+                            children: [
+                              Text("Category: ", style: TextStyle(fontSize: 12, color: Colors.blue),),
+                              const SizedBox(width: 0,),
+                              Text(record['case_category'] ?? "", style: TextStyle(fontSize: 13),),
+                            ],
+                          ),
+                          const SizedBox(height: 11,),
+                          if(record['handler'] != '' && record['handler'] != null)Row(
+                            children: [
+                              Text("Handler: ", style: TextStyle(fontSize: 12, color: Colors.grey),),
+                              const SizedBox(width: 1,),
+                              StreamBuilder<List<Widget>>(
+                                stream: getPartyHandlerStream(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    if(record['handler'] !=  null && record['handler'] != '')  {
+                                      var handler = record['handler'];
+
+                                      return Text("$handler", style: TextStyle(
+                                        color: Colors.teal,
+                                      ),
+                                        overflow: TextOverflow.ellipsis,);
+                                    }
+
+                                    return SizedBox.shrink();
+
+                                  }
+
+                                  final reportStatus = snapshot.data!;
+
+                                  if (reportStatus == 'true') {
+                                    // Display "completed" message
+                                    return Text('Resolved');
+                                  } else {
+                                    // Display "processing" message
+                                    return Text('Processing');
+                                  }
+                                },
+                              ),                            ],
+                          ),
+
                         ],
                       ),
                       trailing: Column(
                         children: [
                           Text('${date.day}/${date.month}/${date.year}'),
                           const  SizedBox(height: 10,),
-                      // StreamBuilder<String>(
-                      //   stream: getReportStatusStream('documentId'),
-                      //   builder: (context, snapshot) {
-                      //     if (!snapshot.hasData) {
-                      //       // Display loading spinner or placeholder text
-                      //       return CircularProgressIndicator();
-                      //     }
-                      //
-                      //     final reportStatus = snapshot.data!;
-                      //
-                      //     if (reportStatus == true) {
-                      //       // Display "completed" message
-                      //       return Text('Completed.');
-                      //     } else {
-                      //       // Display "processing" message
-                      //       return Text('Processing.');
-                      //     }
-                      //   },
-                      // ),
-                          // isComplete ? Text("Completed", style: TextStyle(color: Colors.green),): Text("Processing", style: TextStyle(color: Colors.orangeAccent.shade200,)),
                       StreamBuilder<String>(
                         stream: getReportStatusStream(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             // Display loading spinner or placeholder text\
-                            var statusRef = record['isCompleted'];
+                            var statusRef = record['isCompleted'] ?? false;
                             var status = statusRef ? Text("Resolved", style: TextStyle(
                               color: Colors.green,
                             ),) : Text("Processing", style: TextStyle(
@@ -244,15 +279,14 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
 
                           if (reportStatus == 'true') {
                             // Display "completed" message
-                            return Text('Completed');
+                            return Text('Resolved');
                           } else {
                             // Display "processing" message
                             return Text('Processing');
                           }
                         },
                       ),
-
-                      ],
+                        ],
                       ),
                     ),
                   ),

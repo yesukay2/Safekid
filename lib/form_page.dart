@@ -551,6 +551,7 @@ class _Form_PageState extends State<Form_Page> {
                             } else if (value?.length != 10) {
                               return ("Invalid Phone number!");
                             }
+                            return null;
                           },
                           decoration: const InputDecoration(
                               labelText: "Phone number",
@@ -632,6 +633,10 @@ class _Form_PageState extends State<Form_Page> {
   }
 
   void reportCase() async {
+    var name = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get();
     setState(() {
       hasErrorMessage = false;
     });
@@ -650,13 +655,17 @@ class _Form_PageState extends State<Form_Page> {
           'age': ageController.text,
           'online_category': dropdownValue,
           'comment': commentController.text,
+          'handler': "CRI",
+          'displayname': name.data()?['firstName'] +  ' ' + name.data()?['lastName'],
+
         });
 
         Fluttertoast.showToast(
-            msg: "Report Submitted Successfully. Check Cases Tab to track progress!",
+            msg: "Report Submitted Successfully!",
             gravity: ToastGravity.CENTER,
-            backgroundColor: Colors.red.shade500,
-            toastLength:Toast.LENGTH_LONG
+            backgroundColor: Colors.grey,
+            toastLength:Toast.LENGTH_LONG,
+          textColor: Colors.white
         );
         Navigator.of(context).pop();
       } else
@@ -667,7 +676,7 @@ class _Form_PageState extends State<Form_Page> {
       Fluttertoast.showToast(
           msg: e.message.toString(),
           gravity: ToastGravity.CENTER,
-          backgroundColor: Colors.red.shade400,
+          backgroundColor: Colors.grey,
           toastLength: Toast.LENGTH_LONG);
     }
   }
