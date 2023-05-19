@@ -47,17 +47,22 @@ class _AboutPageState extends State<AboutPage> {
       key: scaffoldKey,
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () => scaffoldKey.currentState!.openEndDrawer(),
-              icon: const Icon(Icons.menu))
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,0,10,0),
+            child: Image.asset(
+              "lib/images/logo-removebg-preview.jpg",
+              fit: BoxFit.contain,
+              height: 10,
+            ),
+          ),
         ],
         backgroundColor: Colors.blueGrey,
-        leading: Image.asset(
-          "lib/images/logo-removebg-preview.jpg",
-          fit: BoxFit.contain,
-          height: 10,
-        ),
-        leadingWidth: 100,
+        // leading: Image.asset(
+        //   "lib/images/logo-removebg-preview.jpg",
+        //   fit: BoxFit.contain,
+        //   height: 10,
+        // ),
+        // leadingWidth: 100,
         title: const Text(
           "Child Rights Int.",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),

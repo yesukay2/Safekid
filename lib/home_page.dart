@@ -6,6 +6,10 @@ import 'package:safekid/auth_page.dart';
 import 'package:safekid/form_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:safekid/library.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:safekid/profile_page.dart';
+
+import 'home.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -16,27 +20,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetchDisplayName();
-  }
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final userId = FirebaseAuth.instance.currentUser?.uid;
   var displayName;
 
-
-  fetchDisplayName() async {
-    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .get();
-    setState(() {
-      displayName = userDoc['firstName'];
-      return(displayName);
-    });
-  }
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +34,11 @@ class _HomePageState extends State<HomePage> {
       key: scaffoldKey,
       backgroundColor: Colors.blueGrey.shade50,
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () => scaffoldKey.currentState!.openEndDrawer(),
-              icon: const Icon(Icons.menu_rounded))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () => scaffoldKey.currentState!.openEndDrawer(),
+        //       icon: const Icon(Icons.menu_rounded))
+        // ],
         backgroundColor: Colors.blueGrey,
         leading: Image.asset(
           "lib/images/logo-removebg-preview.jpg",
@@ -62,157 +52,27 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
       ),
-      endDrawer: Drawer(
-        // shape: ShapeBorder,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage("lib/images/profile_icon.png"),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '${displayName}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.library_books_outlined),
-              title: Text('Cases'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>UserRecordsWidget()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.account_balance_outlined),
-              title: Text('About Us'),
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) =>AboutPage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.lock_outline),
-              title: Text('Sign Out'),
-              onTap: () {
-                signOutAction();
-              },
-            ),
-          ],
-        ),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.deepOrange,
+        animationDuration: Duration(milliseconds: 100),
+        items: [
+          Icon(Icons.home_outlined),
+          Icon(Icons.library_books_outlined),
+          Icon(Icons.person_outline)
+        ],
+        onTap: (index){
+          setState(() {
+            currentIndex = index;
+          });
+        },
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          ClipPath(
-            child: Image.asset(
-              "lib/images/homePic.jpg",
-              fit: BoxFit.cover,
-              height: 300,
-            ),
-          ),
-          const SizedBox(
-            height: 90,
-          ),
-          Container(
-            child: ElevatedButton.icon(
-              autofocus: true,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepOrange.shade500,
-                shape: StadiumBorder(),
-                side: BorderSide(
-                  style: BorderStyle.solid,
-                  width: 3,
-                  color: Colors.white60,
-                ),
-                fixedSize: Size(180, 50),
-                elevation: 20,
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Form_Page()));
-              },
-              icon: Icon(
-                Icons.report_gmailerrorred_outlined,
-                size: 30,
-              ),
-              label: Text(
-                "Report Case",
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 80,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AnimatedTextKit(
-                  isRepeatingAnimation: true,
-                  pause: Duration.zero,
-                  stopPauseOnTap: true,
-                  repeatForever: true,
-                  animatedTexts: [
-                    ColorizeAnimatedText(
-                      "THE GREATEST GIFT TO EVERY CHILD IS A GIFT OF \"MYSELF\"\n\n ~Bright Appiah",
-                      speed: Duration(milliseconds: 110),
-                      textDirection: TextDirection.ltr,
-                      textAlign: TextAlign.center,
-                      colors: [
-                        Colors.blue.shade900,
-                        Colors.deepOrange,
-                        Colors.brown,
-                        Colors.brown.shade300,
-                        Colors.black45
-                      ],
-                      textStyle: TextStyle(
-                        fontSize: 19,
-                        fontFamily: "Arima",
-                      ),
-                    ),
-                    TypewriterAnimatedText(
-                        "An Adult is a Child who has Survived",
-                        curve: Curves.easeInOutSine,
-                        textAlign: TextAlign.center,
-                        speed: Duration(milliseconds: 160),
-                        textStyle: TextStyle(
-                            fontFamily: "Arima",
-                            fontSize: 20,
-                            color: Colors.blue.shade900)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: TextLiquidFill(
-                text: "",
-                textAlign: TextAlign.center,
-                loadUntil: 0.8,
-                waveDuration: Duration(milliseconds: 1100),
-                boxBackgroundColor: Colors.transparent,
-                waveColor: Colors.deepOrange.shade500,
-                textStyle: TextStyle(fontSize: 15, color: Colors.blue),
-                loadDuration: Duration(milliseconds: 1100),
-                boxHeight: 70,
-              ),
-            ),
-          ),
+
+      body: IndexedStack(
+        index: currentIndex,
+        children: [
+          Home(),
+          UserRecordsWidget(),
+          profile()
         ],
       ),
     );

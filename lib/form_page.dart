@@ -89,13 +89,13 @@ class _Form_PageState extends State<Form_Page> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        ClipPath(
+                        ClipRect(
                           // clipper: BottomWaveClipper(),
                           child: Image.asset(
                             "lib/images/formPic.jpg",
                             fit: BoxFit.cover,
-                            height: 250,
-                            width: 500,
+                            // height: 300,
+                            // width: 100,
                           ),
                         ),
                         Container(
@@ -586,7 +586,7 @@ class _Form_PageState extends State<Form_Page> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 100),
+                              vertical: 10, horizontal: 100),
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -604,7 +604,7 @@ class _Form_PageState extends State<Form_Page> {
                             label: Text("Submit Report"),
                           ),
                         ),
-
+                        const SizedBox(height: 50,),
                       ],
                     ),
                   );
