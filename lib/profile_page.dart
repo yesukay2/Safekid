@@ -36,72 +36,66 @@ class _profileState extends State<profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage("lib/images/profile_icon.png"),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '${displayName}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
+      body: Column(children: [
+        DrawerHeader(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage("lib/images/profile_icon.png"),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.library_books_outlined),
-              title: Text('Home'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.account_balance_outlined),
-              title: Text('About Us'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AboutPage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.lock_outline),
-              title: Text('Sign Out'),
-              onTap: () {
-                signOutAction();
-              },
-            ),
-            const SizedBox(height: 335,),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextLiquidFill(
-                  text: "",
-                  textAlign: TextAlign.center,
-                  loadUntil: 0.8,
-                  waveDuration: Duration(milliseconds: 1100),
-                  boxBackgroundColor: Colors.transparent,
-                  waveColor: Colors.deepOrange.shade500,
-                  textStyle: TextStyle(fontSize: 15, color: Colors.blue),
-                  loadDuration: Duration(milliseconds: 1100),
-                  boxHeight: 70,
+              SizedBox(height: 10),
+              Text(
+                '${displayName}',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
-      ),
+        ListTile(
+          leading: Icon(Icons.library_books_outlined),
+          title: Text('Home'),
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.account_balance_outlined),
+          title: Text('About Us'),
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AboutPage()));
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.lock_outline),
+          title: Text('Sign Out'),
+          onTap: () {
+            signOutAction();
+          },
+        ),
+        const SizedBox(height: 259,),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: TextLiquidFill(
+            text: "",
+            textAlign: TextAlign.center,
+            loadUntil: 0.8,
+            waveDuration: Duration(milliseconds: 1100),
+            boxBackgroundColor: Colors.transparent,
+            waveColor: Colors.deepOrange.shade500,
+            textStyle: TextStyle(fontSize: 15, color: Colors.blue),
+            loadDuration: Duration(milliseconds: 1100),
+            boxHeight: 70,
+          ),
+        ),
+      ],
+          ),
     );
   }
 
