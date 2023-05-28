@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bulleted_list/bulleted_list.dart';
-import 'package:safekid/auth_page.dart';
-import 'package:safekid/home_page.dart';
-import 'library.dart';
+import 'package:sizer/sizer.dart';
 
 class AboutPage extends StatefulWidget {
   @override
@@ -36,12 +34,6 @@ class _AboutPageState extends State<AboutPage> {
   // QuerySnapshot snapshot = await connection
   @override
   Widget build(BuildContext context) {
-    void signOutAction() {
-      FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => AuthPage()),
-              (route) => route.isFirst);
-    }
 
     return Scaffold(
       key: scaffoldKey,
@@ -69,58 +61,58 @@ class _AboutPageState extends State<AboutPage> {
         ),
         centerTitle: true,
       ),
-      endDrawer: Drawer(
-        // shape: ShapeBorder,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage("lib/images/profile_icon.png"),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '${displayName}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home_outlined),
-              title: Text('Home'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.library_books_outlined),
-              title: Text('Cases'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UserRecordsWidget()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.lock_outline),
-              title: Text('Sign Out'),
-              onTap: () {
-                signOutAction();
-              },
-            ),
-          ],
-        ),
-      ),
+      // endDrawer: Drawer(
+      //   // shape: ShapeBorder,
+      //   child: ListView(
+      //     padding: EdgeInsets.zero,
+      //     children: [
+      //       DrawerHeader(
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.center,
+      //           children: [
+      //             CircleAvatar(
+      //               radius: 50,
+      //               backgroundImage: AssetImage("lib/images/profile_icon.png"),
+      //             ),
+      //             SizedBox(height: 10),
+      //             Text(
+      //               '${displayName}',
+      //               style: TextStyle(
+      //                 color: Colors.black,
+      //                 fontSize: 18,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.home_outlined),
+      //         title: Text('Home'),
+      //         onTap: () {
+      //           Navigator.push(context,
+      //               MaterialPageRoute(builder: (context) => HomePage()));
+      //         },
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.library_books_outlined),
+      //         title: Text('Cases'),
+      //         onTap: () {
+      //           Navigator.push(
+      //               context,
+      //               MaterialPageRoute(
+      //                   builder: (context) => UserRecordsWidget()));
+      //         },
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.lock_outline),
+      //         title: Text('Sign Out'),
+      //         onTap: () {
+      //           signOutAction();
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -134,7 +126,7 @@ class _AboutPageState extends State<AboutPage> {
                     'Mission',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 24.0,
+                        fontSize: 4.5.w,
                         fontWeight: FontWeight.w200,
                         decoration: TextDecoration.underline,
                     color: Colors.deepOrange),
@@ -145,7 +137,7 @@ class _AboutPageState extends State<AboutPage> {
               Text(
                 'Our mission is to promote and protect the inherent dignity of every child, and address the fundamental needs of children',
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 3.w,
                   height: 1.5,
                   color:Colors.blueGrey.shade900,
                 ),
@@ -157,7 +149,7 @@ class _AboutPageState extends State<AboutPage> {
               Text(
                 'Steps to take when you notice any instance of Child Abuse',
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 4.5.w,
                   fontWeight: FontWeight.w100,
                   color: Colors.deepOrange,
                   decoration: TextDecoration.underline,
@@ -167,23 +159,23 @@ class _AboutPageState extends State<AboutPage> {
               BulletedList(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 listItems: [
-                  "Identify instance of abuse",
-                  "Report case to Child Rights Int. using Safekid App",
-                  "Await referral",
-                  "Follow up on case",
+                  Text("Identify instance of abuse", style: TextStyle(fontSize: 3.w),),
+                  Text("Report case to Child Rights Int. using Safekid App", style: TextStyle(fontSize: 3.w),),
+                  Text("Await referral", style: TextStyle(fontSize: 3.w),),
+                  Text("Follow up on case", style: TextStyle(fontSize: 3.w),),
                 ],
                 bullet: Icon(
                   Icons.play_arrow_rounded,
                   color: Colors.deepOrange,
-                  size: 18,
+                  size: 3.w,
                 ),
                 style: TextStyle(
-                    fontSize: 16, fontFamily: "Merriweather",
+                  fontFamily: "Merriweather",
                   color: Colors.blueGrey.shade900,
                 ),
               ),
               SizedBox(
-                height: 80,
+                height: 8.h,
               ),
               Container(
                 alignment: FractionalOffset.bottomCenter,
@@ -195,7 +187,7 @@ class _AboutPageState extends State<AboutPage> {
                       Text(
                         'Contact Us:',
                         style: TextStyle(
-                            fontSize: 18.0,
+                            fontSize: 4.w,
                             fontWeight: FontWeight.w200,
                             decoration: TextDecoration.underline),
                       ),
@@ -204,20 +196,20 @@ class _AboutPageState extends State<AboutPage> {
                         children: [
                           Icon(
                             Icons.location_on_outlined,
-                            size: 20,
+                            size: 4.w,
                           ),
                           SizedBox(width: 4.0),
                           Text(
                             'Address ',
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 2.5.w,
                               color: Colors.white54,
                             ),
                           ),
                           Text(
                             ": Adumua St",
                             style:
-                            TextStyle(fontSize: 16.0, color: Colors.white),
+                            TextStyle(fontSize: 2.1.w, color: Colors.white),
                           ),
                         ],
                       ),
@@ -226,20 +218,20 @@ class _AboutPageState extends State<AboutPage> {
                         children: [
                           Icon(
                             Icons.location_city_rounded,
-                            size: 20,
+                            size: 4.w,
                           ),
                           SizedBox(width: 4.0),
                           Text(
                             "City ",
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 2.5.w,
                               color: Colors.white54,
                             ),
                           ),
                           Text(
                             ": Dzorwulu, Accra ",
                             style:
-                            TextStyle(fontSize: 16.0, color: Colors.white),
+                            TextStyle(fontSize: 2.1.w, color: Colors.white),
                           ),
                         ],
                       ),
@@ -248,20 +240,20 @@ class _AboutPageState extends State<AboutPage> {
                         children: [
                           Icon(
                             Icons.map_outlined,
-                            size: 20,
+                            size: 4.w,
                           ),
                           SizedBox(width: 4.0),
                           Text(
                             "Region ",
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 2.5.w,
                               color: Colors.white54,
                             ),
                           ),
                           Text(
                             ": Greater Accra ",
                             style:
-                            TextStyle(fontSize: 16.0, color: Colors.white),
+                            TextStyle(fontSize: 2.1.w, color: Colors.white),
                           ),
                         ],
                       ),
@@ -270,20 +262,20 @@ class _AboutPageState extends State<AboutPage> {
                         children: [
                           Icon(
                             Icons.phone_iphone,
-                            size: 20,
+                            size: 4.w,
                           ),
                           SizedBox(width: 4.0),
                           Text(
                             "Phone ",
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 2.5.w,
                               color: Colors.white54,
                             ),
                           ),
                           Text(
                             ": 0302503744",
                             style:
-                            TextStyle(fontSize: 16.0, color: Colors.white),
+                            TextStyle(fontSize: 2.1.w, color: Colors.white),
                           ),
                         ],
                       ),
@@ -292,20 +284,20 @@ class _AboutPageState extends State<AboutPage> {
                         children: [
                           Icon(
                             Icons.email_outlined,
-                            size: 20,
+                            size: 4.w,
                           ),
                           SizedBox(width: 4.0),
                           Text(
                             "E-mail ",
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 2.5.w,
                               color: Colors.white54,
                             ),
                           ),
                           Text(
                             ": info@crighana.org ",
                             style:
-                            TextStyle(fontSize: 16.0, color: Colors.white),
+                            TextStyle(fontSize: 2.1.w, color: Colors.white),
                           ),
                         ],
                       ),
@@ -316,21 +308,19 @@ class _AboutPageState extends State<AboutPage> {
                       Container(
                         child: Column(
                           children: [
-                            Align(
-                              alignment: FractionalOffset.bottomCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 30.0),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.copyright_outlined, color: Colors.white70,),
-                                    Text(
-                                      'Child Rights International',
-                                      style: TextStyle(
-                                          color: Colors.white54,
-                                      ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 30.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.copyright_outlined, color: Colors.white70,),
+                                  Text(
+                                    'Child Rights International',
+                                    style: TextStyle(
+                                        color: Colors.white54,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                             Divider(

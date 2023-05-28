@@ -1,13 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:safekid/about_page.dart';
-import 'package:safekid/auth_page.dart';
-import 'package:safekid/form_page.dart';
+import 'package:Safekid_Gh/auth_page.dart';
+import 'package:Safekid_Gh/form_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:safekid/library.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:safekid/profile_page.dart';
+import 'package:sizer/sizer.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -17,8 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  @override
-
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -40,62 +34,67 @@ class _HomeState extends State<Home> {
             // height: 300,
           ),
         ),
-        const SizedBox(
-          height: 60,
-        ),
-        Container(
-          child: ElevatedButton.icon(
-            autofocus: true,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange.shade500,
-              shape: StadiumBorder(),
-              side: BorderSide(
-                style: BorderStyle.solid,
-                width: 3,
-                color: Colors.white60,
+        // Expanded(
+        //   child: const SizedBox(
+        //     height: 40,
+        //   ),
+        // ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0,50,0,20),
+          child: Container(
+            child: ElevatedButton.icon(
+              autofocus: true,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepOrange.shade500,
+                shape: StadiumBorder(),
+                side: BorderSide(
+                  style: BorderStyle.solid,
+                  width: 1.h,
+                  color: Colors.white60,
+                ),
+                fixedSize: Size(50.w, 8.h),
+                elevation: 20,
               ),
-              fixedSize: Size(180, 50),
-              elevation: 20,
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Form_Page()));
-            },
-            icon: Icon(
-              Icons.report_gmailerrorred_outlined,
-              size: 30,
-            ),
-            label: Text(
-              "Report Case",
-              style: TextStyle(fontSize: 18),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Form_Page()));
+              },
+              icon: Icon(
+                Icons.report_gmailerrorred_outlined,
+                size: 4.h,
+              ),
+              label: Text(
+                "Report Case",
+                style: TextStyle(fontSize: 2.5.h),
+              ),
             ),
           ),
         ),
-        const SizedBox(
-          height: 80,
-        ),
+        // const SizedBox(
+        //   height: 30,
+        // ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: AnimatedTextKit(
             isRepeatingAnimation: true,
-            pause: Duration.zero,
+            pause: Duration(seconds:0),
             stopPauseOnTap: false,
             repeatForever: true,
             animatedTexts: [
-              ColorizeAnimatedText(
-                "THE GREATEST GIFT TO EVERY CHILD IS A GIFT OF \"MYSELF\"\n\n ~Bright Appiah",
-                speed: Duration(milliseconds: 110),
-                textDirection: TextDirection.ltr,
+              ScaleAnimatedText(
+                "The Greatest Gift To Every Child Is A Gift Of \"Myself\"\n ~Bright Appiah",
+                duration: Duration(milliseconds: 8000),
+                // textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,
-                colors: [
-                  Colors.blue.shade900,
-                  Colors.deepOrange,
-                  Colors.brown,
-                  Colors.brown.shade300,
-                  Colors.black45
-                ],
+                // colors: [
+                //   Colors.blue.shade900,
+                //   Colors.deepOrange,
+                //   Colors.brown,
+                //   Colors.brown.shade300,
+                //   Colors.black45
+                // ],
                 textStyle: TextStyle(
-                  fontSize: 19,
+                  fontSize: 3.h,
                   fontFamily: "Arima",
                 ),
               ),
@@ -106,7 +105,7 @@ class _HomeState extends State<Home> {
                   speed: Duration(milliseconds: 160),
                   textStyle: TextStyle(
                       fontFamily: "Arima",
-                      fontSize: 20,
+                      fontSize: 3.h,
                       color: Colors.blue.shade900)),
             ],
           ),
@@ -123,7 +122,8 @@ class _HomeState extends State<Home> {
               waveColor: Colors.deepOrange.shade500,
               textStyle: TextStyle(fontSize: 15, color: Colors.blue),
               loadDuration: Duration(milliseconds: 1100),
-              boxHeight: 70,
+              boxHeight: 10.h,
+              boxWidth: 100.w,
             ),
           ),
         ),

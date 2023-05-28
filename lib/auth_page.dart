@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:safekid/home_page.dart';
-import 'package:safekid/login_or_register.dart';
+import 'package:Safekid_Gh/home_page.dart';
+import 'package:Safekid_Gh/login_or_register.dart';
 
 
 

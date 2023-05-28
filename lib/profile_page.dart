@@ -2,10 +2,10 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:safekid/home_page.dart';
+import 'package:Safekid_Gh/home_page.dart';
+import 'package:sizer/sizer.dart';
 import 'about_page.dart';
 import 'auth_page.dart';
-import 'library.dart';
 
 class profile extends StatefulWidget {
   const profile({Key? key}) : super(key: key);
@@ -63,24 +63,27 @@ class _profileState extends State<profile> {
             child: Column(
               children: [
                 ListTile(
-                  leading: Icon(Icons.library_books_outlined),
-                  title: Text('Home'),
+                  leading: Icon(Icons.library_books_outlined, size: 4.w),
+                  title: Text('Home',
+                  style: TextStyle(fontSize: 2.5.w)),
                   onTap: () {
                     Navigator.push(
                         context, MaterialPageRoute(builder: (context) => HomePage()));
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.account_balance_outlined),
-                  title: Text('About Us'),
+                  leading: Icon(Icons.account_balance_outlined, size: 4.w),
+                  title: Text('About Us',
+                  style: TextStyle(fontSize: 2.5.w)),
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => AboutPage()));
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.lock_outline),
-                  title: Text('Sign Out'),
+                  leading: Icon(Icons.lock_outline, size: 4.w),
+                  title: Text('Sign Out',
+                  style: TextStyle(fontSize: 2.5.w)),
                   onTap: () {
                     signOutAction();
                   },
@@ -102,7 +105,8 @@ class _profileState extends State<profile> {
               waveColor: Colors.deepOrange.shade500,
               textStyle: TextStyle(fontSize: 15, color: Colors.blue),
               loadDuration: Duration(milliseconds: 1100),
-              boxHeight: 70,
+              boxHeight: 10.h,
+              boxWidth: 100.w,
             ),
           ),
         ],

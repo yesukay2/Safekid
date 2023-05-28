@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sizer/sizer.dart';
 
 enum StatusType { Victim, Witness_Informant }
 
@@ -187,7 +188,7 @@ class _Form_PageState extends State<Form_Page> {
                                 height: 15,
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                // mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   const Text(
                                     "Age :",
@@ -241,6 +242,7 @@ class _Form_PageState extends State<Form_Page> {
                               const Text(
                                 "Select the category that best describes the incident:",
                                 softWrap: true,
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 16.8,
                                   fontWeight: FontWeight.w300,
@@ -591,7 +593,7 @@ class _Form_PageState extends State<Form_Page> {
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              fixedSize: Size(165, 40),
+                              fixedSize: Size(35.5.w, 5.h),
                               backgroundColor: Colors.deepOrange,
                               elevation: 15,
                             ),
@@ -600,8 +602,9 @@ class _Form_PageState extends State<Form_Page> {
                             },
                             icon: Icon(
                               Icons.library_add_check,
+                              size: 4.5.w,
                             ),
-                            label: Text("Submit Report"),
+                            label: Text("Submit Report", style: TextStyle(fontSize: 3.w),),
                           ),
                         ),
                         const SizedBox(height: 50,),

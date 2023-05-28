@@ -1,14 +1,10 @@
 import 'dart:async';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:safekid/auth_page.dart';
-import 'package:safekid/profile_page.dart';
-import 'about_page.dart';
-import 'home_page.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:Safekid_Gh/auth_page.dart';
+import 'package:sizer/sizer.dart';
 
 class UserRecordsWidget extends StatefulWidget {
   @override
@@ -138,9 +134,11 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
                         SizedBox(
                           height: 50,
                           width: 50,
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.deepOrange,
-                            color: Colors.blueAccent,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.deepOrange,
+                              color: Colors.blueAccent,
+                            ),
                           ),
                         ),
                       ],
@@ -164,14 +162,14 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
                     child: Column(
                       children: [
                         SizedBox(
-                          width: 500,
+                          // width: 500,
                           child: ListTile(
                             title: Row(
                               children: [
                                 Text(
                                   "Status: ",
                                   style: TextStyle(
-                                      fontSize: 12, color: Colors.deepOrange),
+                                      fontSize: 1.h, color: Colors.deepOrange),
                                 ),
                                 const SizedBox(
                                   width: 12,
@@ -190,7 +188,7 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
                                     Text(
                                       "Category: ",
                                       style: TextStyle(
-                                          fontSize: 12, color: Colors.blue),
+                                          fontSize: 1.h, color: Colors.blue),
                                     ),
                                     const SizedBox(
                                       width: 0,
@@ -211,7 +209,7 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
                                       Text(
                                         "Handler: ",
                                         style: TextStyle(
-                                            fontSize: 12, color: Colors.grey),
+                                            fontSize: 1.h, color: Colors.grey),
                                       ),
                                       const SizedBox(
                                         width: 1,
@@ -315,7 +313,8 @@ class _UserRecordsWidgetState extends State<UserRecordsWidget> {
             waveColor: Colors.deepOrange.shade500,
             textStyle: TextStyle(fontSize: 15, color: Colors.blue),
             loadDuration: Duration(milliseconds: 1100),
-            boxHeight: 70,
+            boxHeight: 10.h,
+            boxWidth: 100.w,
           ),
         ],
       ),

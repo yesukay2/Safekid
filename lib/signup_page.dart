@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
-import 'package:safekid/home_page.dart';
-import 'package:safekid/model/user_model.dart';
-import 'components/login_textfield.dart';
+import 'package:Safekid_Gh/home_page.dart';
+import 'package:Safekid_Gh/model/user_model.dart';
 
 class SignUp_Page extends StatefulWidget {
   final Function()? onTap;
@@ -315,7 +314,8 @@ class _SignUp_PageState extends State<SignUp_Page> {
               })
           .catchError((e) {
         Fluttertoast.showToast(msg: e!.message, gravity: ToastGravity.CENTER);
-      });
+      }
+      );
     } else {
       setState(() {
         isLoading = false;

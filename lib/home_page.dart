@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:safekid/about_page.dart';
-import 'package:safekid/auth_page.dart';
-import 'package:safekid/form_page.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:safekid/library.dart';
+import 'package:Safekid_Gh/auth_page.dart';
+import 'package:Safekid_Gh/library.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:safekid/profile_page.dart';
+import 'package:Safekid_Gh/profile_page.dart';
+import 'package:sizer/sizer.dart';
 
 import 'home.dart';
 
@@ -19,8 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -56,9 +51,9 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.deepOrange,
         animationDuration: Duration(milliseconds: 100),
         items: [
-          Icon(Icons.home_outlined),
-          Icon(Icons.library_books_outlined),
-          Icon(Icons.person_outline)
+          Icon(Icons.home_outlined, size: 4.w),
+          Icon(Icons.library_books_outlined, size: 4.w),
+          Icon(Icons.person_outline, size: 4.w)
         ],
         onTap: (index){
           setState(() {

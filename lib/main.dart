@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:safekid/auth_page.dart';
+import 'package:Safekid_Gh/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:safekid/cases_page.dart';
-import 'about_page.dart';
+import 'package:sizer/sizer.dart';
 import 'firebase_options.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -22,22 +19,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Merriweather",
-      ),
-      home: new AnimatedSplashScreen(
-        splash: Image.asset("lib/images/CRI_logo.png"),
-        splashIconSize: 300,
-        nextScreen: AuthPage(),
-        centered: true,
-        duration: 5,
-        animationDuration: Duration(seconds: 2),
-        splashTransition: SplashTransition.fadeTransition,
-        curve:Curves.decelerate,
-      ),
-      builder: EasyLoading.init(),
-    );
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "Merriweather",
+        ),
+        home: new AnimatedSplashScreen(
+          splash: Image.asset("lib/images/CRI_logo.png"),
+          splashIconSize: 300,
+          nextScreen: AuthPage(),
+          centered: true,
+          duration: 5,
+          animationDuration: Duration(seconds: 2),
+          splashTransition: SplashTransition.fadeTransition,
+          curve: Curves.decelerate,
+        ),
+      );
+    });
   }
 }
