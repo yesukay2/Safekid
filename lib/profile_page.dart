@@ -14,7 +14,8 @@ class profile extends StatefulWidget {
   State<profile> createState() => _profileState();
 }
 
-final userId = FirebaseAuth.instance.currentUser?.uid;
+final user = FirebaseAuth.instance.currentUser;
+final userId = user?.uid;
 var displayName;
 
 class _profileState extends State<profile> {
@@ -58,35 +59,52 @@ class _profileState extends State<profile> {
               ],
             ),
           ),
-          
+
           Expanded(
             child: Column(
               children: [
                 ListTile(
-                  leading: Icon(Icons.library_books_outlined, size: 4.w),
-                  title: Text('Home',
-                  style: TextStyle(fontSize: 2.5.w)),
+                  horizontalTitleGap: 2,
+                  dense: true,
+                  leading: Icon(Icons.library_books_outlined, size: 4.5.w),
+                  title: Text('Home', style: TextStyle(fontSize: 3.w)),
                   onTap: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => HomePage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.account_balance_outlined, size: 4.w),
-                  title: Text('About Us',
-                  style: TextStyle(fontSize: 2.5.w)),
+                  horizontalTitleGap: 2,
+                  dense: true,
+                  leading: Icon(Icons.account_balance_outlined, size: 4.5.w),
+                  title: Text('About Us', style: TextStyle(fontSize: 3.w)),
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => AboutPage()));
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.lock_outline, size: 4.w),
-                  title: Text('Sign Out',
-                  style: TextStyle(fontSize: 2.5.w)),
+                  horizontalTitleGap: 2,
+                  dense: true,
+                  leading: Icon(Icons.lock_outline, size: 4.5.w),
+                  title: Text('Sign Out', style: TextStyle(fontSize: 3.w)),
                   onTap: () {
                     signOutAction();
                   },
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top:15.0),
+                  child: ListTile(
+                    horizontalTitleGap: 2,
+                    dense: true,
+                    leading: Icon(Icons.delete_forever_outlined, size: 4.5.w, color: Colors.red),
+                    title:
+                        Text('Delete Account', style: TextStyle(fontSize: 3.w)),
+                    onTap: () {
+                      deleteAccountAction();
+                    },
+                  ),
                 ),
               ],
             ),
@@ -119,5 +137,36 @@ class _profileState extends State<profile> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => AuthPage()),
         (route) => route.isFirst);
+  }
+
+  void deleteAccountAction() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to delete your account?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                user!.delete();
+                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => AuthPage()),
+                    (route) => route.isFirst);
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

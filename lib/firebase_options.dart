@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,19 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA_zGexlcWVoIEyjdwGJHOnkIaUG3fjR-c',
-    appId: '1:412744498113:web:17e0daa06312e7de2f8d40',
-    messagingSenderId: '412744498113',
-    projectId: 'child-rights-international',
-    authDomain: 'child-rights-international.firebaseapp.com',
-    storageBucket: 'child-rights-international.appspot.com',
-    measurementId: 'G-EJRHFFMYSX',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAy2TOfIgG3YfTjU5sZkuqBl6t7KmgT9gU',
-    appId: '1:412744498113:android:3dbe0c95ade7d9e52f8d40',
+    appId: '1:412744498113:android:be4706638d77758e2f8d40',
     messagingSenderId: '412744498113',
     projectId: 'child-rights-international',
     storageBucket: 'child-rights-international.appspot.com',
@@ -63,21 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAm1FgcAluYid0Zzy4ULr5HsQJmFyIqQiA',
-    appId: '1:412744498113:ios:d891ac39ea3bf0352f8d40',
+    appId: '1:412744498113:ios:7ec525a83b9827772f8d40',
     messagingSenderId: '412744498113',
     projectId: 'child-rights-international',
     storageBucket: 'child-rights-international.appspot.com',
-    iosClientId: '412744498113-8nt8ltjgegc9es24r2ovlnj5runt9p0r.apps.googleusercontent.com',
-    iosBundleId: 'com.example.safekid',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAm1FgcAluYid0Zzy4ULr5HsQJmFyIqQiA',
-    appId: '1:412744498113:ios:d891ac39ea3bf0352f8d40',
-    messagingSenderId: '412744498113',
-    projectId: 'child-rights-international',
-    storageBucket: 'child-rights-international.appspot.com',
-    iosClientId: '412744498113-8nt8ltjgegc9es24r2ovlnj5runt9p0r.apps.googleusercontent.com',
-    iosBundleId: 'com.example.safekid',
+    androidClientId: '412744498113-9i56706q3mfav8bdmpbd1efjaehlgnar.apps.googleusercontent.com',
+    iosClientId: '412744498113-0ov33m24j4ud90mp1jjs4b222oohumuj.apps.googleusercontent.com',
+    iosBundleId: 'com.cri.safekidGh',
   );
 }

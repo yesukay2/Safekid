@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:412744498113:android:3dbe0c95ade7d9e52f8d40",
+        "mobilesdk_app_id": "1:412744498113:android:be4706638d77758e2f8d40",
         "android_client_info": {
-          "package_name": "com.example.safekid"
+          "package_name": "com.cri.safekidGh"
         }
       },
       "oauth_client": [
@@ -31,10 +31,54 @@
               "client_type": 3
             },
             {
-              "client_id": "412744498113-uj4c0ib2m681obfrhjfpami46dpomoj5.apps.googleusercontent.com",
+              "client_id": "412744498113-0ov33m24j4ud90mp1jjs4b222oohumuj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.Yesu.cri"
+                "bundle_id": "com.cri.safekidGh"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412744498113:android:01a84da0fa7459a42f8d40",
+        "android_client_info": {
+          "package_name": "com.example.safekid_monitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412744498113-9i56706q3mfav8bdmpbd1efjaehlgnar.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.safekid_monitor",
+            "certificate_hash": "a9cf2ed37361659ab66b6db190c683326e8b8864"
+          }
+        },
+        {
+          "client_id": "412744498113-36btbfj4n11d2rmunhvdnciqudjp07g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy2TOfIgG3YfTjU5sZkuqBl6t7KmgT9gU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412744498113-36btbfj4n11d2rmunhvdnciqudjp07g2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "412744498113-0ov33m24j4ud90mp1jjs4b222oohumuj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cri.safekidGh"
               }
             }
           ]
