@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:412744498113:android:43800b764507a79c2f8d40",
+        "android_client_info": {
+          "package_name": "com.cri.safekid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412744498113-36btbfj4n11d2rmunhvdnciqudjp07g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy2TOfIgG3YfTjU5sZkuqBl6t7KmgT9gU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412744498113-36btbfj4n11d2rmunhvdnciqudjp07g2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "412744498113-0ov33m24j4ud90mp1jjs4b222oohumuj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cri.safekidGh"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:412744498113:android:be4706638d77758e2f8d40",
         "android_client_info": {
           "package_name": "com.cri.safekidGh"

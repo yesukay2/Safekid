@@ -1,4 +1,4 @@
-package com.cri.safekidGh
+package com.cri.safekid
 
 import io.flutter.embedding.android.FlutterActivity
 

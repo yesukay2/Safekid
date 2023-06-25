@@ -659,7 +659,7 @@ class _Form_PageState extends State<Form_Page> {
           'online_category': dropdownValue,
           'comment': commentController.text,
           'handler': "CRI",
-          'displayname': name.data()?['firstName'] +  ' ' + name.data()?['lastName'],
+          'displayname': name.data()?['firstName'] +  ' ' + name.data()?['secondName'],
 
         });
 

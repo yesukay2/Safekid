@@ -1,9 +1,10 @@
+import 'package:Safekid_Gh/home_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:Safekid_Gh/home_page.dart';
 import 'package:sizer/sizer.dart';
+
 import 'about_page.dart';
 import 'auth_page.dart';
 
@@ -14,24 +15,27 @@ class profile extends StatefulWidget {
   State<profile> createState() => _profileState();
 }
 
-final user = FirebaseAuth.instance.currentUser;
-final userId = user?.uid;
+var user = FirebaseAuth.instance.currentUser;
+var userId = user?.uid;
 var displayName;
 
 class _profileState extends State<profile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      userId = user?.uid;
+    });
     fetchDisplayName();
   }
 
+
   fetchDisplayName() async {
-    final DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    setState(() {
+    DocumentSnapshot userDoc =
+    await FirebaseFirestore.instance.collection('users').doc(userId).get();
       displayName = userDoc['firstName'];
       return (displayName);
-    });
+
   }
 
   @override
@@ -92,15 +96,15 @@ class _profileState extends State<profile> {
                     signOutAction();
                   },
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.only(top:15.0),
+                  padding: const EdgeInsets.only(top: 15.0),
                   child: ListTile(
                     horizontalTitleGap: 2,
                     dense: true,
-                    leading: Icon(Icons.delete_forever_outlined, size: 4.5.w, color: Colors.red),
+                    leading: Icon(Icons.delete_forever_outlined,
+                        size: 4.5.w, color: Colors.red),
                     title:
-                        Text('Delete Account', style: TextStyle(fontSize: 3.w)),
+                    Text('Delete Account', style: TextStyle(fontSize: 3.w)),
                     onTap: () {
                       deleteAccountAction();
                     },
@@ -136,7 +140,7 @@ class _profileState extends State<profile> {
     FirebaseAuth.instance.signOut();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => AuthPage()),
-        (route) => route.isFirst);
+            (route) => route.isFirst);
   }
 
   void deleteAccountAction() {
@@ -160,7 +164,7 @@ class _profileState extends State<profile> {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => AuthPage()),
-                    (route) => route.isFirst);
+                        (route) => route.isFirst);
               },
               child: Text('Delete'),
             ),

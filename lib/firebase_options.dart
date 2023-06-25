@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAy2TOfIgG3YfTjU5sZkuqBl6t7KmgT9gU',
-    appId: '1:412744498113:android:be4706638d77758e2f8d40',
+    appId: '1:412744498113:android:43800b764507a79c2f8d40',
     messagingSenderId: '412744498113',
     projectId: 'child-rights-international',
     storageBucket: 'child-rights-international.appspot.com',
